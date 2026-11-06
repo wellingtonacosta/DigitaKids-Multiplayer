@@ -1,7 +1,7 @@
 import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "wouter";
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Volume2, VolumeX, Eye, EyeOff, X, RotateCcw, ArrowRight, RefreshCw, Lock, Gauge, Target, Sparkles, Hand, Lightbulb } from "lucide-react";
+import { ArrowLeft, Volume2, VolumeX, Eye, EyeOff, X, RotateCcw, ArrowRight, RefreshCw, Lock, Gauge, Target, Sparkles, Hand, Lightbulb, Flame, Medal } from "lucide-react";
 import {
   useListarLicoes, useEnviarResultadoLicao, getListarLicoesQueryKey, getObterJogadorAtualQueryKey,
   type Licao, type ResultadoLicao, type ResultadoLicaoInput,
@@ -16,6 +16,7 @@ import { Galo, Pintinho } from "@/components/milharal";
 import { Estrelas, AvisoTeclado } from "@/pages/aulas";
 import { lerMudo, salvarMudo, tocarSom } from "@/lib/dedos";
 import { cn } from "@/lib/utils";
+import { SeloMedalha } from "@/components/medalhas";
 
 function nomeTecla(code: string) {
   const k = teclaPorCode(code);
@@ -270,8 +271,25 @@ function TelaResultado({ r, licao, calor, proximaId, onDeNovo }: { r: ResultadoL
         <p className="mt-2 font-bold text-accent">{licao.titulo}</p>
         <h1 className="font-display text-3xl sm:text-5xl font-extrabold" data-testid="text-mensagem">{r.mensagem}</h1>
         <div className="mt-4 flex justify-center pop"><Estrelas n={r.estrelas} tamanho="h-12 w-12" /></div>
+        {r.sequenciaDias > 0 && <p className="mt-3 text-sm font-semibold opacity-85 flex justify-center items-center gap-1" data-testid="text-sequencia-resultado"><Flame className="h-4 w-4 text-accent" aria-hidden="true" />{r.sequenciaDias} {r.sequenciaDias === 1 ? "dia" : "dias"} seguidos de treino</p>}
         {r.melhorou && <p className="mt-2 inline-flex items-center gap-1 rounded-full bg-accent text-accent-foreground px-3 py-1 font-bold"><Sparkles className="h-4 w-4" aria-hidden="true" />Novo recorde seu!</p>}
       </section>
+
+      {r.medalhasNovas.length > 0 && (
+        <section aria-labelledby="titulo-medalhas-novas" className="chunky rounded-3xl bg-accent p-5 sm:p-6 palha pop" data-testid="section-medalhas-novas">
+          <h2 id="titulo-medalhas-novas" className="font-display text-2xl sm:text-3xl font-extrabold flex items-center gap-2"><Medal className="h-7 w-7 shrink-0" aria-hidden="true" />{r.medalhasNovas.length === 1 ? "Medalha nova!" : r.medalhasNovas.length + " medalhas novas!"}</h2>
+          <p className="sr-only" role="status">Você ganhou: {r.medalhasNovas.map((m) => m.titulo).join(", ")}</p>
+          <ul className="mt-3 grid gap-3 sm:grid-cols-2">
+            {r.medalhasNovas.map((m, i) => (
+              <li key={m.chave} data-testid={"card-medalha-nova-" + m.chave} className="flex items-center gap-3 rounded-2xl bg-card border-[3px] border-foreground p-3 min-w-0 pop" style={{ animationDelay: 0.2 + i * 0.15 + "s" }}>
+                <SeloMedalha m={m} tamanho="lg" />
+                <div className="min-w-0"><p className="font-display text-xl font-extrabold break-words">{m.titulo}</p><p className="text-sm font-semibold text-muted-foreground">{m.descricao}</p></div>
+              </li>
+            ))}
+          </ul>
+          <Link href="/perfil" data-testid="link-ver-medalhas" className="mt-3 inline-block font-bold underline underline-offset-4">Ver minha coleção</Link>
+        </section>
+      )}
 
       {(r.subiuDeNivel || r.proximaLicaoDesbloqueada) && (
         <div className="grid gap-3 sm:grid-cols-2">

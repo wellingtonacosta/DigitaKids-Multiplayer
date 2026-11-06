@@ -1,5 +1,5 @@
 import { randomInt } from "node:crypto";
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import {
   db, raceResultsTable, raceTextsTable, racesTable, roomsTable, usersTable,
 } from "@workspace/db";
@@ -10,6 +10,8 @@ import {
   type StatusSala,
 } from "@workspace/typing-core";
 import { levelFor } from "../levels";
+import { proximaSequencia } from "../sequencia";
+import { conferirMedalhas } from "../medalhas";
 import { logger } from "../logger";
 
 interface JogadorInterno extends JogadorSala {
@@ -328,13 +330,16 @@ async function gravarResultados(
     await db.insert(raceResultsTable).values(
       linhas.map((l) => ({ raceId, userId: l.userId, position: l.position, wpm: l.wpm, accuracy: l.accuracy, pointsAwarded: l.points })),
     );
-    for (const l of linhas.filter((x) => x.points > 0)) {
-      const [u] = await db
+    for (const l of linhas) {
+      const [atual] = await db.select().from(usersTable).where(eq(usersTable.id, l.userId));
+      if (!atual) continue;
+      const agora = new Date();
+      const totalPoints = atual.totalPoints + l.points;
+      await db
         .update(usersTable)
-        .set({ totalPoints: sql`${usersTable.totalPoints} + ${l.points}`, lastPlayedAt: new Date() })
-        .where(eq(usersTable.id, l.userId))
-        .returning();
-      if (u) await db.update(usersTable).set({ level: levelFor(u.totalPoints) }).where(eq(usersTable.id, u.id));
+        .set({ totalPoints, level: levelFor(totalPoints), lastPlayedAt: agora, streak: proximaSequencia(atual.streak, atual.lastPlayedAt, agora) })
+        .where(eq(usersTable.id, l.userId));
+      await conferirMedalhas(l.userId);
     }
   } catch (err) {
     logger.error({ err }, "Falha ao gravar resultados da corrida");

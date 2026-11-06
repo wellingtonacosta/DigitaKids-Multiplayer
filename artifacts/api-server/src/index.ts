@@ -2,6 +2,7 @@ import app from "./app";
 import { logger } from "./lib/logger";
 import { seedLicoes } from "./lib/seed-licoes";
 import { seedTextosCorrida } from "./lib/seed-textos";
+import { seedMedalhas } from "./lib/medalhas";
 import { iniciarSocket } from "./lib/corridas/socket";
 
 const rawPort = process.env["PORT"];
@@ -21,6 +22,7 @@ if (Number.isNaN(port) || port <= 0) {
 try {
   await seedLicoes();
   await seedTextosCorrida();
+  await seedMedalhas();
 } catch (err) {
   logger.error({ err }, "Não foi possível preparar as lições (o esquema do banco está atualizado?)");
 }

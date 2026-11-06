@@ -1,7 +1,7 @@
 import { type ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route, Switch, useLocation, Router as WouterRouter } from "wouter";
-import { Trophy, UserRound, RefreshCw } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import { useHealthCheck, getHealthCheckQueryKey } from "@workspace/api-client-react";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { Toaster } from "@/components/ui/toaster";
@@ -11,7 +11,8 @@ import { useSessao } from "@/hooks/use-sessao";
 import NotFound from "@/pages/not-found";
 import Entrada from "@/pages/entrada";
 import Inicio from "@/pages/inicio";
-import EmBreve from "@/pages/em-breve";
+import RankingPagina from "@/pages/ranking";
+import PerfilPagina from "@/pages/perfil";
 import Aulas from "@/pages/aulas";
 import LicaoPagina from "@/pages/licao";
 import Corridas from "@/pages/corridas";
@@ -61,8 +62,8 @@ function Router() {
           <Route path="/aulas/:id" component={LicaoPagina} />
           <Route path="/corridas" component={Corridas} />
           <Route path="/sala/:codigo" component={SalaPagina} />
-          <Route path="/ranking">{() => <EmBreve titulo="Ranking" icone={Trophy} frase="Logo você vai ver seu nome subindo na tabela." />}</Route>
-          <Route path="/perfil">{() => <EmBreve titulo="Perfil" icone={UserRound} frase="Suas medalhas e recordes vão morar aqui." />}</Route>
+          <Route path="/ranking" component={RankingPagina} />
+          <Route path="/perfil" component={PerfilPagina} />
           <Route component={NotFound} />
         </Switch>
       </RoutedErrorBoundary>

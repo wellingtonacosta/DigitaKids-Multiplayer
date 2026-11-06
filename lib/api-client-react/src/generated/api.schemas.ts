@@ -45,6 +45,15 @@ export const ResultadoLicaoDesequilibrada = {
   nenhuma: 'nenhuma',
 } as const;
 
+export interface Medalha {
+  chave: string;
+  titulo: string;
+  descricao: string;
+  conquistada: boolean;
+  /** @nullable */
+  conquistadaEm: string | null;
+}
+
 export interface ResultadoLicao {
   wpm: number;
   precisao: number;
@@ -60,6 +69,59 @@ export interface ResultadoLicao {
   desequilibrada: ResultadoLicaoDesequilibrada;
   mensagem: string;
   dica: string;
+  medalhasNovas: Medalha[];
+  sequenciaDias: number;
+}
+
+export interface ItemRanking {
+  posicao: number;
+  jogadorId: number;
+  apelido: string;
+  avatar: string;
+  nivel: string;
+  /** Pontos ou palavras por minuto, conforme o tipo */
+  valor: number;
+}
+
+export type RankingTipo = typeof RankingTipo[keyof typeof RankingTipo];
+
+
+export const RankingTipo = {
+  pontos: 'pontos',
+  velocidade: 'velocidade',
+} as const;
+
+export interface Ranking {
+  tipo: RankingTipo;
+  itens: ItemRanking[];
+  /** Posição de quem está jogando (nulo se ainda não tem marca neste ranking) */
+  voce: ItemRanking | null;
+  totalJogadores: number;
+}
+
+export interface Perfil {
+  apelido: string;
+  avatar: string;
+  nivel: string;
+  pontosTotais: number;
+  /**
+     * Pontos que faltam para o próximo nível (nulo no último nível)
+     * @nullable
+     */
+  pontosProximoNivel: number | null;
+  /** @nullable */
+  proximoNivel: string | null;
+  sequenciaDias: number;
+  licoesConcluidas: number;
+  totalLicoes: number;
+  estrelasTotais: number;
+  melhorWpm: number;
+  melhorPrecisao: number;
+  corridasDisputadas: number;
+  vitorias: number;
+  posicaoPontos: number;
+  entrouEm: string;
+  medalhas: Medalha[];
 }
 
 export interface HealthStatus {
@@ -88,4 +150,16 @@ export interface Jogador {
   /** Verdadeiro quando o cadastro acabou de ser criado */
   novo: boolean;
 }
+
+export type ObterRankingParams = {
+tipo?: ObterRankingTipo;
+};
+
+export type ObterRankingTipo = typeof ObterRankingTipo[keyof typeof ObterRankingTipo];
+
+
+export const ObterRankingTipo = {
+  pontos: 'pontos',
+  velocidade: 'velocidade',
+} as const;
 

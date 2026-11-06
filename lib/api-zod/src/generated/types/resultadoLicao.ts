@@ -5,6 +5,7 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { Medalha } from './medalha';
 import type { ResultadoLicaoDesequilibrada } from './resultadoLicaoDesequilibrada';
 
 export interface ResultadoLicao {
@@ -22,4 +23,6 @@ export interface ResultadoLicao {
   desequilibrada: ResultadoLicaoDesequilibrada;
   mensagem: string;
   dica: string;
+  medalhasNovas: Medalha[];
+  sequenciaDias: number;
 }

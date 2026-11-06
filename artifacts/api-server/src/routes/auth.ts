@@ -12,6 +12,7 @@ import {
 } from "../lib/identity";
 import { AVATARS, NICKNAME_RE, hasBadWord } from "../lib/nickname";
 import { rateLimit } from "../lib/rateLimit";
+import { sequenciaVisivel } from "../lib/sequencia";
 
 const router: IRouter = Router();
 
@@ -30,7 +31,7 @@ function toJogador(u: User, novo: boolean) {
     avatar: u.avatar,
     pontosTotais: u.totalPoints,
     nivel: u.level,
-    sequenciaDias: u.streak,
+    sequenciaDias: sequenciaVisivel(u.streak, u.lastPlayedAt),
     novo,
   };
 }

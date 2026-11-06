@@ -25,6 +25,9 @@ import type {
   HealthStatus,
   Jogador,
   Licao,
+  ObterRankingParams,
+  Perfil,
+  Ranking,
   ResultadoLicao,
   ResultadoLicaoInput
 } from './api.schemas';
@@ -373,6 +376,167 @@ export const useSair = <TError = ErrorType<unknown>,
       > => {
       return useMutation(getSairMutationOptions(options));
     }
+
+export const getObterRankingUrl = (params?: ObterRankingParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/ranking?${stringifiedParams}` : `/api/ranking`
+}
+
+/**
+ * @summary Ranking dos jogadores
+ */
+export const obterRanking = async (params?: ObterRankingParams, options?: Parameters<typeof customFetch>[1]): Promise<Ranking> => {
+
+  return customFetch<Ranking>(getObterRankingUrl(params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getObterRankingQueryKey = (params?: ObterRankingParams,) => {
+    return [
+    `/api/ranking`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getObterRankingQueryOptions = <TData = Awaited<ReturnType<typeof obterRanking>>, TError = ErrorType<Erro>>(params?: ObterRankingParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof obterRanking>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getObterRankingQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof obterRanking>>> = ({ signal }) => obterRanking(params, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof obterRanking>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ObterRankingQueryResult = NonNullable<Awaited<ReturnType<typeof obterRanking>>>
+export type ObterRankingQueryError = ErrorType<Erro>
+
+
+/**
+ * @summary Ranking dos jogadores
+ */
+
+export function useObterRanking<TData = Awaited<ReturnType<typeof obterRanking>>, TError = ErrorType<Erro>>(
+ params?: ObterRankingParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof obterRanking>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getObterRankingQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getObterPerfilUrl = () => {
+
+
+
+
+  return `/api/perfil`
+}
+
+/**
+ * @summary Perfil, recordes e medalhas do jogador
+ */
+export const obterPerfil = async ( options?: Parameters<typeof customFetch>[1]): Promise<Perfil> => {
+
+  return customFetch<Perfil>(getObterPerfilUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getObterPerfilQueryKey = () => {
+    return [
+    `/api/perfil`
+    ] as const;
+    }
+
+
+export const getObterPerfilQueryOptions = <TData = Awaited<ReturnType<typeof obterPerfil>>, TError = ErrorType<Erro>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof obterPerfil>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getObterPerfilQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof obterPerfil>>> = ({ signal }) => obterPerfil({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof obterPerfil>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ObterPerfilQueryResult = NonNullable<Awaited<ReturnType<typeof obterPerfil>>>
+export type ObterPerfilQueryError = ErrorType<Erro>
+
+
+/**
+ * @summary Perfil, recordes e medalhas do jogador
+ */
+
+export function useObterPerfil<TData = Awaited<ReturnType<typeof obterPerfil>>, TError = ErrorType<Erro>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof obterPerfil>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getObterPerfilQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
 
 export const getListarLicoesUrl = () => {
 

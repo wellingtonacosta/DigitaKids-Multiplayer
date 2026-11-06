@@ -95,6 +95,50 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /ranking:
+    get:
+      operationId: obterRanking
+      tags: [ranking]
+      summary: Ranking dos jogadores
+      parameters:
+        - name: tipo
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [pontos, velocidade]
+            default: pontos
+      responses:
+        "200":
+          description: Os 20 primeiros e a posição de quem está jogando
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ranking"
+        "401":
+          description: Sem sessão
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+  /perfil:
+    get:
+      operationId: obterPerfil
+      tags: [perfil]
+      summary: Perfil, recordes e medalhas do jogador
+      responses:
+        "200":
+          description: Perfil completo
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Perfil"
+        "401":
+          description: Sem sessão
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
   /licoes:
     get:
       operationId: listarLicoes
@@ -261,7 +305,15 @@ components:
           type: string
         dica:
           type: string
+        medalhasNovas:
+          type: array
+          items:
+            $ref: "#/components/schemas/Medalha"
+        sequenciaDias:
+          type: integer
       required:
+        - medalhasNovas
+        - sequenciaDias
         - wpm
         - precisao
         - estrelas
@@ -276,6 +328,133 @@ components:
         - desequilibrada
         - mensagem
         - dica
+    Medalha:
+      type: object
+      properties:
+        chave:
+          type: string
+        titulo:
+          type: string
+        descricao:
+          type: string
+        conquistada:
+          type: boolean
+        conquistadaEm:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+        - chave
+        - titulo
+        - descricao
+        - conquistada
+        - conquistadaEm
+    ItemRanking:
+      type: object
+      properties:
+        posicao:
+          type: integer
+        jogadorId:
+          type: integer
+        apelido:
+          type: string
+        avatar:
+          type: string
+        nivel:
+          type: string
+        valor:
+          type: number
+          description: Pontos ou palavras por minuto, conforme o tipo
+      required:
+        - posicao
+        - jogadorId
+        - apelido
+        - avatar
+        - nivel
+        - valor
+    Ranking:
+      type: object
+      properties:
+        tipo:
+          type: string
+          enum: [pontos, velocidade]
+        itens:
+          type: array
+          items:
+            $ref: "#/components/schemas/ItemRanking"
+        voce:
+          allOf:
+            - $ref: "#/components/schemas/ItemRanking"
+          nullable: true
+          description: Posição de quem está jogando (nulo se ainda não tem marca neste ranking)
+        totalJogadores:
+          type: integer
+      required:
+        - tipo
+        - itens
+        - voce
+        - totalJogadores
+    Perfil:
+      type: object
+      properties:
+        apelido:
+          type: string
+        avatar:
+          type: string
+        nivel:
+          type: string
+        pontosTotais:
+          type: integer
+        pontosProximoNivel:
+          type: integer
+          nullable: true
+          description: Pontos que faltam para o próximo nível (nulo no último nível)
+        proximoNivel:
+          type: string
+          nullable: true
+        sequenciaDias:
+          type: integer
+        licoesConcluidas:
+          type: integer
+        totalLicoes:
+          type: integer
+        estrelasTotais:
+          type: integer
+        melhorWpm:
+          type: number
+        melhorPrecisao:
+          type: number
+        corridasDisputadas:
+          type: integer
+        vitorias:
+          type: integer
+        posicaoPontos:
+          type: integer
+        entrouEm:
+          type: string
+          format: date-time
+        medalhas:
+          type: array
+          items:
+            $ref: "#/components/schemas/Medalha"
+      required:
+        - apelido
+        - avatar
+        - nivel
+        - pontosTotais
+        - pontosProximoNivel
+        - proximoNivel
+        - sequenciaDias
+        - licoesConcluidas
+        - totalLicoes
+        - estrelasTotais
+        - melhorWpm
+        - melhorPrecisao
+        - corridasDisputadas
+        - vitorias
+        - posicaoPontos
+        - entrouEm
+        - medalhas
     HealthStatus:
       type: object
       properties:

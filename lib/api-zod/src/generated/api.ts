@@ -60,6 +60,67 @@ export const SairResponse = zod.object({
 
 
 /**
+ * @summary Ranking dos jogadores
+ */
+export const obterRankingQueryTipoDefault = `pontos`;
+
+export const ObterRankingQueryParams = zod.object({
+  "tipo": zod.enum(['pontos', 'velocidade']).default(obterRankingQueryTipoDefault)
+})
+
+export const ObterRankingResponse = zod.object({
+  "tipo": zod.enum(['pontos', 'velocidade']),
+  "itens": zod.array(zod.object({
+  "posicao": zod.number().int(),
+  "jogadorId": zod.number().int(),
+  "apelido": zod.string(),
+  "avatar": zod.string(),
+  "nivel": zod.string(),
+  "valor": zod.number().describe('Pontos ou palavras por minuto, conforme o tipo')
+})),
+  "voce": zod.union([zod.object({
+  "posicao": zod.number().int(),
+  "jogadorId": zod.number().int(),
+  "apelido": zod.string(),
+  "avatar": zod.string(),
+  "nivel": zod.string(),
+  "valor": zod.number().describe('Pontos ou palavras por minuto, conforme o tipo')
+}),zod.null()]).describe('Posição de quem está jogando (nulo se ainda não tem marca neste ranking)'),
+  "totalJogadores": zod.number().int()
+})
+
+
+/**
+ * @summary Perfil, recordes e medalhas do jogador
+ */
+export const ObterPerfilResponse = zod.object({
+  "apelido": zod.string(),
+  "avatar": zod.string(),
+  "nivel": zod.string(),
+  "pontosTotais": zod.number().int(),
+  "pontosProximoNivel": zod.number().int().nullable().describe('Pontos que faltam para o próximo nível (nulo no último nível)'),
+  "proximoNivel": zod.string().nullable(),
+  "sequenciaDias": zod.number().int(),
+  "licoesConcluidas": zod.number().int(),
+  "totalLicoes": zod.number().int(),
+  "estrelasTotais": zod.number().int(),
+  "melhorWpm": zod.number(),
+  "melhorPrecisao": zod.number(),
+  "corridasDisputadas": zod.number().int(),
+  "vitorias": zod.number().int(),
+  "posicaoPontos": zod.number().int(),
+  "entrouEm": zod.coerce.date(),
+  "medalhas": zod.array(zod.object({
+  "chave": zod.string(),
+  "titulo": zod.string(),
+  "descricao": zod.string(),
+  "conquistada": zod.boolean(),
+  "conquistadaEm": zod.coerce.date().nullable()
+}))
+})
+
+
+/**
  * @summary Lições com progresso do jogador
  */
 export const ListarLicoesResponseItem = zod.object({
@@ -108,7 +169,15 @@ export const EnviarResultadoLicaoResponse = zod.object({
   "direitaPct": zod.number().int(),
   "desequilibrada": zod.enum(['esquerda', 'direita', 'nenhuma']),
   "mensagem": zod.string(),
-  "dica": zod.string()
+  "dica": zod.string(),
+  "medalhasNovas": zod.array(zod.object({
+  "chave": zod.string(),
+  "titulo": zod.string(),
+  "descricao": zod.string(),
+  "conquistada": zod.boolean(),
+  "conquistadaEm": zod.coerce.date().nullable()
+})),
+  "sequenciaDias": zod.number().int()
 })
 
 

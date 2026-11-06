@@ -41,6 +41,7 @@ _Populate as you build — explicit user instructions worth remembering across s
 - A lógica de digitação (mapa ABNT2, WPM, precisão, estrelas, textos das lições) vive em `lib/typing-core`; servidor e navegador usam o mesmo código. Testes: `pnpm --filter @workspace/typing-core run test`.
 - As 8 lições são gravadas no banco na inicialização da API (`seed-licoes.ts`), a partir de `lib/typing-core/src/licoes.ts`.
 - Corridas: Socket.IO no servidor da API (`/api/socket.io`), salas em memória (`lib/corridas`), contrato compartilhado em `lib/typing-core/src/corrida.ts`. Os 60 textos são gravados na primeira execução.
+- Sequência de dias e medalhas: contadas por dia civil em America/Sao_Paulo (`lib/sequencia.ts`); medalhas são conferidas no banco após cada lição e corrida (`lib/medalhas.ts`, catálogo gravado na inicialização). Mudou o catálogo? O perfil já mostra a lista nova.
 - Depois de mudar o OpenAPI: `pnpm --filter @workspace/api-spec run codegen`.
 
 ## Pointers

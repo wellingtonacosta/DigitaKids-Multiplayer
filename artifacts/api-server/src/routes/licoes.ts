@@ -20,6 +20,8 @@ import {
 import { rateLimit } from "../lib/rateLimit";
 import { jogadorDaSessao } from "../lib/sessao";
 import { levelFor } from "../lib/levels";
+import { proximaSequencia } from "../lib/sequencia";
+import { conferirMedalhas, medalhaPorChave } from "../lib/medalhas";
 
 const router: IRouter = Router();
 const SEM_SESSAO = { erro: "Entre com seu apelido para jogar." };
@@ -142,10 +144,17 @@ router.post("/licoes/:id/resultado", rateLimit(30, 10 * 60 * 1000), async (req, 
 
   const pontosTotais = user.totalPoints + pontosGanhos;
   const nivel = levelFor(pontosTotais);
+  const agora = new Date();
+  const sequenciaDias = proximaSequencia(user.streak, user.lastPlayedAt, agora);
   await db
     .update(usersTable)
-    .set({ totalPoints: pontosTotais, level: nivel, lastPlayedAt: new Date() })
+    .set({ totalPoints: pontosTotais, level: nivel, lastPlayedAt: agora, streak: sequenciaDias })
     .where(and(eq(usersTable.id, user.id)));
+  const novas = await conferirMedalhas(user.id);
+  const medalhasNovas = novas.flatMap((chave) => {
+    const m = medalhaPorChave(chave);
+    return m ? [{ ...m, conquistada: true, conquistadaEm: agora }] : [];
+  });
 
   const jaDestravada = melhorAntes >= 1;
   const resposta = {
@@ -163,6 +172,8 @@ router.post("/licoes/:id/resultado", rateLimit(30, 10 * 60 * 1000), async (req, 
     direitaPct: eq_.direitaPct,
     desequilibrada: eq_.desequilibrada ?? ("nenhuma" as const),
     mensagem: mensagemMotivadora(estrelas),
+    medalhasNovas,
+    sequenciaDias,
     dica: gerarDica({ errosPorTecla: b.errosPorTecla, equilibrio: eq_, precisao, estrelas }),
   };
   res.json(EnviarResultadoLicaoResponse.parse(resposta));
