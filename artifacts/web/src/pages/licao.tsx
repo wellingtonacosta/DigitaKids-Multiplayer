@@ -10,6 +10,7 @@ import { MotorDigitacao, codeDoShift, teclaPorCode, NOME_DEDO, type Dedo } from 
 import { useTecladoFisico } from "@/hooks/use-sessao";
 import { TecladoVirtual, type Flash } from "@/components/teclado-virtual";
 import { Maos } from "@/components/maos";
+import { VideoObrigatorio } from "@/components/video-obrigatorio";
 import { PosicaoMaos } from "@/components/posicao-maos";
 import { Galo, Pintinho } from "@/components/milharal";
 import { Estrelas, AvisoTeclado } from "@/pages/aulas";
@@ -65,6 +66,7 @@ function Sessao({ licao, proximaId, voltar }: { licao: Licao; proximaId?: number
   const enviar = useEnviarResultadoLicao();
   const [rodada, setRodada] = useState(0);
   const [intro, setIntro] = useState(licao.ordem === 1);
+  const [video, setVideo] = useState(licao.ordem === 1);
   const motor = useMemo(() => new MotorDigitacao(licao.textoAlvo), [licao.textoAlvo, rodada]);
   const [, setTick] = useState(0);
   const [flash, setFlash] = useState<Flash>(null);
@@ -158,6 +160,8 @@ function Sessao({ licao, proximaId, voltar }: { licao: Licao; proximaId?: number
   const progresso = Math.round((idx / chars.length) * 100);
 
   const live = <div className="sr-only" aria-live="assertive" role="status" data-testid="status-anuncio">{anuncio}</div>;
+
+  if (video) return <VideoObrigatorio onContinuar={() => setVideo(false)} />;
 
   if (intro) {
     return (
