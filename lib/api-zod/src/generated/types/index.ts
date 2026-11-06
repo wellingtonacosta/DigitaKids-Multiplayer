@@ -10,3 +10,8 @@ export * from './entrarInput';
 export * from './erro';
 export * from './healthStatus';
 export * from './jogador';
+export * from './licao';
+export * from './resultadoLicao';
+export * from './resultadoLicaoDesequilibrada';
+export * from './resultadoLicaoInput';
+export * from './resultadoLicaoInputErrosPorTecla';

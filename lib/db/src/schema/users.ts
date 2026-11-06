@@ -8,7 +8,7 @@ export const usersTable = pgTable(
     ipHash: text("ip_hash").notNull(),
     avatar: text("avatar").notNull(),
     totalPoints: integer("total_points").notNull().default(0),
-    level: text("level").notNull().default("Aprendiz"),
+    level: text("level").notNull().default("Pintinho"),
     streak: integer("streak").notNull().default(0),
     lastPlayedAt: timestamp("last_played_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),

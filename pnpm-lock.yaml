@@ -181,6 +181,9 @@ importers:
       '@workspace/db':
         specifier: workspace:*
         version: link:../../lib/db
+      '@workspace/typing-core':
+        specifier: workspace:*
+        version: link:../../lib/typing-core
       cookie-parser:
         specifier: ^1.4.7
         version: 1.4.7
@@ -409,6 +412,10 @@ importers:
         version: 3.25.76
 
   artifacts/web:
+    dependencies:
+      '@workspace/typing-core':
+        specifier: workspace:*
+        version: link:../../lib/typing-core
     devDependencies:
       '@hookform/resolvers':
         specifier: ^3.10.0
@@ -642,6 +649,15 @@ importers:
       drizzle-kit:
         specifier: ^0.31.11
         version: 0.31.11
+
+  lib/typing-core:
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 25.9.9
+      tsx:
+        specifier: 'catalog:'
+        version: 4.23.15
 
   scripts:
     devDependencies:

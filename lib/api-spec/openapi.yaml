@@ -12,6 +12,8 @@ tags:
     description: Health operations
   - name: auth
     description: Identificação simples por apelido
+  - name: licoes
+    description: Trilha de aulas de digitação
 paths:
   /healthz:
     get:
@@ -93,8 +95,187 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /licoes:
+    get:
+      operationId: listarLicoes
+      tags: [licoes]
+      summary: Lições com progresso do jogador
+      responses:
+        "200":
+          description: Trilha de lições
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Licao"
+        "401":
+          description: Sem sessão
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+  /licoes/{id}/resultado:
+    post:
+      operationId: enviarResultadoLicao
+      tags: [licoes]
+      summary: Enviar o resultado de uma lição
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResultadoLicaoInput"
+      responses:
+        "200":
+          description: Resultado calculado pelo servidor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultadoLicao"
+        "400":
+          description: Resultado inválido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+        "401":
+          description: Sem sessão
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+        "403":
+          description: Lição ainda bloqueada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+        "404":
+          description: Lição não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
 components:
   schemas:
+    Licao:
+      type: object
+      properties:
+        id:
+          type: integer
+        ordem:
+          type: integer
+        titulo:
+          type: string
+        descricao:
+          type: string
+        textoAlvo:
+          type: string
+        teclasFoco:
+          type: string
+        desbloqueada:
+          type: boolean
+        estrelas:
+          type: integer
+          description: Melhor resultado, de 0 a 3
+        melhorWpm:
+          type: number
+        melhorPrecisao:
+          type: number
+        semOlharDisponivel:
+          type: boolean
+      required:
+        - id
+        - ordem
+        - titulo
+        - descricao
+        - textoAlvo
+        - teclasFoco
+        - desbloqueada
+        - estrelas
+        - melhorWpm
+        - melhorPrecisao
+        - semOlharDisponivel
+    ResultadoLicaoInput:
+      type: object
+      properties:
+        duracaoMs:
+          type: integer
+          description: Tempo entre o primeiro e o último toque
+        erros:
+          type: integer
+        errosPorTecla:
+          type: object
+          additionalProperties:
+            type: integer
+          description: Erros por tecla física (event.code)
+        teclasEsquerda:
+          type: integer
+        teclasDireita:
+          type: integer
+        semOlhar:
+          type: boolean
+      required:
+        - duracaoMs
+        - erros
+        - errosPorTecla
+        - teclasEsquerda
+        - teclasDireita
+        - semOlhar
+    ResultadoLicao:
+      type: object
+      properties:
+        wpm:
+          type: number
+        precisao:
+          type: number
+        estrelas:
+          type: integer
+        pontosGanhos:
+          type: integer
+        pontosTotais:
+          type: integer
+        nivel:
+          type: string
+        subiuDeNivel:
+          type: boolean
+        proximaLicaoDesbloqueada:
+          type: boolean
+        melhorou:
+          type: boolean
+        esquerdaPct:
+          type: integer
+        direitaPct:
+          type: integer
+        desequilibrada:
+          type: string
+          enum: [esquerda, direita, nenhuma]
+        mensagem:
+          type: string
+        dica:
+          type: string
+      required:
+        - wpm
+        - precisao
+        - estrelas
+        - pontosGanhos
+        - pontosTotais
+        - nivel
+        - subiuDeNivel
+        - proximaLicaoDesbloqueada
+        - melhorou
+        - esquerdaPct
+        - direitaPct
+        - desequilibrada
+        - mensagem
+        - dica
     HealthStatus:
       type: object
       properties:
@@ -134,7 +315,7 @@ components:
           type: integer
         nivel:
           type: string
-          description: Aprendiz, Digitador, Veloz ou Mestre
+          description: Pintinho, Galinha, Galo ou Mestre do Milharal
         sequenciaDias:
           type: integer
         novo:

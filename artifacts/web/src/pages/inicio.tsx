@@ -3,10 +3,12 @@ import { BookOpen, Flag, Trophy, UserRound, Star, Flame, ArrowRight } from "luci
 import type { Jogador } from "@workspace/api-client-react";
 import { Avatar } from "@/components/avatar-jogador";
 import { cn } from "@/lib/utils";
+import { Galo } from "@/components/milharal";
 
-const NIVEIS = ["Aprendiz", "Digitador", "Veloz", "Mestre"];
+const NIVEIS = ["Pintinho", "Galinha", "Galo", "Mestre do Milharal"];
+const LIMIARES = [0, 200, 800, 2000];
 const ATALHOS = [
-  { href: "/aulas", t: "Aulas", d: "Aprenda onde cada dedo mora no teclado.", i: BookOpen, c: "bg-primary text-primary-foreground", r: "-rotate-1" },
+  { href: "/aulas", t: "Aulas", d: "Cada dedo ganha sua casinha no teclado.", i: BookOpen, c: "bg-primary text-primary-foreground", r: "-rotate-1" },
   { href: "/corridas", t: "Corridas", d: "Digite rápido e vença o relógio.", i: Flag, c: "bg-secondary text-secondary-foreground", r: "rotate-1" },
   { href: "/ranking", t: "Ranking", d: "Veja quem está no topo da turma.", i: Trophy, c: "bg-accent text-accent-foreground", r: "rotate-1" },
   { href: "/perfil", t: "Perfil", d: "Suas conquistas e seu avatar.", i: UserRound, c: "bg-card text-foreground", r: "-rotate-1" },
@@ -14,14 +16,16 @@ const ATALHOS = [
 
 export default function Inicio({ jogador }: { jogador: Jogador }) {
   const idx = Math.max(0, NIVEIS.indexOf(jogador.nivel));
+  const prox = LIMIARES[idx + 1];
   return (
     <div className="space-y-8">
-      <section className="chunky rounded-3xl bg-sidebar text-sidebar-foreground p-5 sm:p-8 flex flex-col sm:flex-row gap-5 sm:items-center rise">
+      <section className="chunky rounded-3xl bg-sidebar text-sidebar-foreground p-5 sm:p-8 flex flex-col sm:flex-row gap-5 sm:items-center rise relative overflow-hidden">
+        <Galo tamanho={130} className="hidden sm:block absolute -right-2 -bottom-4 opacity-95" />
         <Avatar chave={jogador.avatar} tamanho={96} className="bob border-accent" />
-        <div className="flex-1">
+        <div className="flex-1 min-w-0 sm:pr-28">
           <p className="font-bold text-accent" aria-live="polite">{jogador.novo ? "Que bom ter você aqui!" : "Que bom te ver de novo!"}</p>
           <h1 className="font-display text-3xl sm:text-5xl font-extrabold break-words" data-testid="text-boas-vindas">Oi, {jogador.apelido}!</h1>
-          <p className="mt-1 opacity-85">Pronto para deixar os dedos mais espertos hoje?</p>
+          <p className="mt-1 opacity-85">Hoje é dia de trocar o catar milho pelos dez dedos. Bora?</p>
         </div>
       </section>
 
@@ -32,6 +36,7 @@ export default function Inicio({ jogador }: { jogador: Jogador }) {
           <ol className="mt-3 flex gap-1.5" aria-label={"Nível " + (idx + 1) + " de 4"}>
             {NIVEIS.map((n, i) => <li key={n} title={n} className={cn("h-3 flex-1 rounded-full border-2 border-foreground", i <= idx ? "bg-primary" : "bg-muted")} />)}
           </ol>
+          <p className="mt-2 text-sm text-muted-foreground font-semibold">{prox !== undefined ? `Faltam ${Math.max(0, prox - jogador.pontosTotais).toLocaleString("pt-BR")} pontos para virar ${NIVEIS[idx + 1]}` : "Você chegou ao topo do milharal!"}</p>
         </div>
         <div className="chunky rounded-2xl bg-accent p-5 rise" style={{animationDelay:".16s"}}>
           <p className="font-bold flex items-center gap-2"><Star className="h-5 w-5" aria-hidden="true" />Pontos</p>

@@ -5,6 +5,63 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+export interface Licao {
+  id: number;
+  ordem: number;
+  titulo: string;
+  descricao: string;
+  textoAlvo: string;
+  teclasFoco: string;
+  desbloqueada: boolean;
+  /** Melhor resultado, de 0 a 3 */
+  estrelas: number;
+  melhorWpm: number;
+  melhorPrecisao: number;
+  semOlharDisponivel: boolean;
+}
+
+/**
+ * Erros por tecla física (event.code)
+ */
+export type ResultadoLicaoInputErrosPorTecla = {[key: string]: number};
+
+export interface ResultadoLicaoInput {
+  /** Tempo entre o primeiro e o último toque */
+  duracaoMs: number;
+  erros: number;
+  /** Erros por tecla física (event.code) */
+  errosPorTecla: ResultadoLicaoInputErrosPorTecla;
+  teclasEsquerda: number;
+  teclasDireita: number;
+  semOlhar: boolean;
+}
+
+export type ResultadoLicaoDesequilibrada = typeof ResultadoLicaoDesequilibrada[keyof typeof ResultadoLicaoDesequilibrada];
+
+
+export const ResultadoLicaoDesequilibrada = {
+  esquerda: 'esquerda',
+  direita: 'direita',
+  nenhuma: 'nenhuma',
+} as const;
+
+export interface ResultadoLicao {
+  wpm: number;
+  precisao: number;
+  estrelas: number;
+  pontosGanhos: number;
+  pontosTotais: number;
+  nivel: string;
+  subiuDeNivel: boolean;
+  proximaLicaoDesbloqueada: boolean;
+  melhorou: boolean;
+  esquerdaPct: number;
+  direitaPct: number;
+  desequilibrada: ResultadoLicaoDesequilibrada;
+  mensagem: string;
+  dica: string;
+}
+
 export interface HealthStatus {
   status: string;
 }
@@ -25,7 +82,7 @@ export interface Jogador {
   apelido: string;
   avatar: string;
   pontosTotais: number;
-  /** Aprendiz, Digitador, Veloz ou Mestre */
+  /** Pintinho, Galinha, Galo ou Mestre do Milharal */
   nivel: string;
   sequenciaDias: number;
   /** Verdadeiro quando o cadastro acabou de ser criado */

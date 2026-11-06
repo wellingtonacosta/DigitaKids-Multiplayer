@@ -31,7 +31,7 @@ export const EntrarResponse = zod.object({
   "apelido": zod.string(),
   "avatar": zod.string(),
   "pontosTotais": zod.number().int(),
-  "nivel": zod.string().describe('Aprendiz, Digitador, Veloz ou Mestre'),
+  "nivel": zod.string().describe('Pintinho, Galinha, Galo ou Mestre do Milharal'),
   "sequenciaDias": zod.number().int(),
   "novo": zod.boolean().describe('Verdadeiro quando o cadastro acabou de ser criado')
 })
@@ -45,7 +45,7 @@ export const ObterJogadorAtualResponse = zod.object({
   "apelido": zod.string(),
   "avatar": zod.string(),
   "pontosTotais": zod.number().int(),
-  "nivel": zod.string().describe('Aprendiz, Digitador, Veloz ou Mestre'),
+  "nivel": zod.string().describe('Pintinho, Galinha, Galo ou Mestre do Milharal'),
   "sequenciaDias": zod.number().int(),
   "novo": zod.boolean().describe('Verdadeiro quando o cadastro acabou de ser criado')
 })
@@ -56,6 +56,59 @@ export const ObterJogadorAtualResponse = zod.object({
  */
 export const SairResponse = zod.object({
   "status": zod.string()
+})
+
+
+/**
+ * @summary Lições com progresso do jogador
+ */
+export const ListarLicoesResponseItem = zod.object({
+  "id": zod.number().int(),
+  "ordem": zod.number().int(),
+  "titulo": zod.string(),
+  "descricao": zod.string(),
+  "textoAlvo": zod.string(),
+  "teclasFoco": zod.string(),
+  "desbloqueada": zod.boolean(),
+  "estrelas": zod.number().int().describe('Melhor resultado, de 0 a 3'),
+  "melhorWpm": zod.number(),
+  "melhorPrecisao": zod.number(),
+  "semOlharDisponivel": zod.boolean()
+})
+export const ListarLicoesResponse = zod.array(ListarLicoesResponseItem)
+
+
+/**
+ * @summary Enviar o resultado de uma lição
+ */
+export const EnviarResultadoLicaoParams = zod.object({
+  "id": zod.coerce.number().int()
+})
+
+export const EnviarResultadoLicaoBody = zod.object({
+  "duracaoMs": zod.number().int().describe('Tempo entre o primeiro e o último toque'),
+  "erros": zod.number().int(),
+  "errosPorTecla": zod.record(zod.string(), zod.number().int()).describe('Erros por tecla física (event.code)'),
+  "teclasEsquerda": zod.number().int(),
+  "teclasDireita": zod.number().int(),
+  "semOlhar": zod.boolean()
+})
+
+export const EnviarResultadoLicaoResponse = zod.object({
+  "wpm": zod.number(),
+  "precisao": zod.number(),
+  "estrelas": zod.number().int(),
+  "pontosGanhos": zod.number().int(),
+  "pontosTotais": zod.number().int(),
+  "nivel": zod.string(),
+  "subiuDeNivel": zod.boolean(),
+  "proximaLicaoDesbloqueada": zod.boolean(),
+  "melhorou": zod.boolean(),
+  "esquerdaPct": zod.number().int(),
+  "direitaPct": zod.number().int(),
+  "desequilibrada": zod.enum(['esquerda', 'direita', 'nenhuma']),
+  "mensagem": zod.string(),
+  "dica": zod.string()
 })
 
 

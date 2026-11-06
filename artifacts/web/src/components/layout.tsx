@@ -5,6 +5,7 @@ import { Avatar } from "@/components/avatar-jogador";
 import { useSairDoJogo } from "@/hooks/use-sessao";
 import type { Jogador } from "@workspace/api-client-react";
 import { cn } from "@/lib/utils";
+import { Espiga, Cerca } from "@/components/milharal";
 
 export const NAV = [
   { href: "/", rotulo: "Início", icone: Home },
@@ -16,8 +17,9 @@ export const NAV = [
 
 export function Logo({ claro = false }: { claro?: boolean }) {
   return (
-    <span className={cn("font-display text-2xl font-extrabold tracking-tight", claro ? "text-sidebar-foreground" : "text-foreground")}>
-      Digita<span className="text-accent">Kids</span>
+    <span className={cn("inline-flex items-center gap-1.5 font-display text-2xl font-extrabold tracking-tight", claro ? "text-sidebar-foreground" : "text-foreground")}>
+      <Espiga tamanho={30} className="-rotate-12" />
+      <span>Digita<span className={claro ? "text-accent" : "text-primary"}>Kids</span></span>
     </span>
   );
 }
@@ -27,11 +29,11 @@ export function Layout({ jogador, children }: { jogador: Jogador; children: Reac
   const { sair, saindo } = useSairDoJogo();
   return (
     <div className="min-h-[100dvh] md:grid md:grid-cols-[240px_1fr] dots-bg">
-      <aside className="hidden md:flex sticky top-0 h-[100dvh] flex-col bg-sidebar text-sidebar-foreground p-5 gap-6">
+      <aside className="hidden md:flex sticky top-0 h-[100dvh] flex-col bg-sidebar text-sidebar-foreground p-5 gap-6 border-r-[3px] border-foreground">
         <Link href="/" data-testid="link-logo" className="px-2"><Logo claro /></Link>
         <nav aria-label="Navegação principal" className="flex flex-col gap-2">
           {NAV.map((n) => {
-            const ativo = loc === n.href;
+            const ativo = n.href === "/" ? loc === "/" : loc.startsWith(n.href);
             return (
               <Link key={n.href} href={n.href} data-testid={"link-nav-" + n.rotulo.toLowerCase()} aria-current={ativo ? "page" : undefined}
                 className={cn("flex items-center gap-3 rounded-xl px-4 py-3 text-lg font-bold transition-all",
@@ -41,7 +43,8 @@ export function Layout({ jogador, children }: { jogador: Jogador; children: Reac
             );
           })}
         </nav>
-        <div className="mt-auto rounded-2xl bg-sidebar-accent p-3 flex items-center gap-3">
+        <Cerca className="mt-auto opacity-90" />
+        <div className="rounded-2xl bg-sidebar-accent p-3 flex items-center gap-3">
           <Avatar chave={jogador.avatar} tamanho={44} />
           <div className="min-w-0 flex-1">
             <p className="font-bold truncate" data-testid="text-apelido-lateral">{jogador.apelido}</p>
@@ -65,11 +68,11 @@ export function Layout({ jogador, children }: { jogador: Jogador; children: Reac
         </div>
       </header>
 
-      <main className="px-4 pt-6 pb-28 md:px-10 md:py-10 max-w-5xl w-full">{children}</main>
+      <main className="px-4 pt-6 pb-28 md:px-10 md:py-10 max-w-5xl w-full min-w-0">{children}</main>
 
       <nav aria-label="Navegação principal" className="md:hidden fixed bottom-0 inset-x-0 z-30 grid grid-cols-5 bg-sidebar border-t-4 border-accent pb-[env(safe-area-inset-bottom)]">
         {NAV.map((n) => {
-          const ativo = loc === n.href;
+          const ativo = n.href === "/" ? loc === "/" : loc.startsWith(n.href);
           return (
             <Link key={n.href} href={n.href} data-testid={"link-tab-" + n.rotulo.toLowerCase()} aria-current={ativo ? "page" : undefined}
               className={cn("flex flex-col items-center gap-1 py-2.5 text-xs font-bold transition-colors",

@@ -5,6 +5,7 @@ import { ShieldCheck, ArrowRight, Check } from "lucide-react";
 import { Avatar, AVATARES } from "@/components/avatar-jogador";
 import { Logo } from "@/components/layout";
 import { cn } from "@/lib/utils";
+import { Pintinho, Espiga } from "@/components/milharal";
 
 function validar(a: string): string | null {
   if (a.length === 0) return "Escreva um apelido para começar.";
@@ -43,14 +44,15 @@ export default function Entrada() {
 
   return (
     <div className="min-h-[100dvh] dots-bg flex flex-col">
-      <div className="bg-sidebar px-5 py-4"><Logo claro /></div>
+      <div className="bg-sidebar px-5 py-4 border-b-[3px] border-foreground"><Logo claro /></div>
       <div className="flex-1 grid grid-cols-[minmax(0,1fr)] lg:grid-cols-[1fr_1.1fr] gap-8 px-4 py-8 md:px-10 max-w-6xl mx-auto w-full items-center">
         <section className="rise min-w-0">
-          <p className="inline-block rounded-full bg-secondary text-secondary-foreground px-4 py-1 font-bold text-sm mb-4">Dez dedos, mil aventuras</p>
+          <div className="flex items-end gap-2 mb-4" aria-hidden="true"><Pintinho tamanho={72} className="bob" /><Espiga tamanho={44} className="rotate-12" /><Espiga tamanho={36} className="-rotate-6" /></div>
+          <p className="inline-block rounded-full bg-secondary text-secondary-foreground px-4 py-1 font-bold text-sm mb-4">Do catar milho aos dez dedos</p>
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.02]">
-            Seus dedos vão ficar <span className="bg-accent px-2 -rotate-1 inline-block border-[3px] border-foreground rounded-lg">super rápidos.</span>
+            Chega de catar milho. <span className="bg-accent px-2 -rotate-1 inline-block border-[3px] border-foreground rounded-lg">Bora usar os dez dedos!</span>
           </h1>
-          <p className="mt-5 text-lg text-muted-foreground max-w-md">Escolha um apelido, pegue seu avatar e comece a treinar. Cada tecla certa vale pontos!</p>
+          <p className="mt-5 text-lg text-muted-foreground max-w-md">Todo mundo começa pintinho, catando uma tecla de cada vez. Treine aqui e vire o mestre do milharal. Cada tecla certa vale pontos!</p>
           <div className="mt-6 hidden lg:flex gap-2 font-mono" aria-hidden="true">
             {["A","S","D","F"," ","J","K","L","Ç"].map((k,i)=> k===" " ? <span key={i} className="w-6" /> :
               <span key={i} className={cn("chunky rounded-lg w-12 h-12 grid place-items-center text-xl bg-card bob", (k==="F"||k==="J") && "bg-primary text-primary-foreground")} style={{animationDelay: i*0.15+"s"}}>{k}</span>)}

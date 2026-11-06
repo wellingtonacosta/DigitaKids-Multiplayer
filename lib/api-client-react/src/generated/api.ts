@@ -23,7 +23,10 @@ import type {
   EntrarInput,
   Erro,
   HealthStatus,
-  Jogador
+  Jogador,
+  Licao,
+  ResultadoLicao,
+  ResultadoLicaoInput
 } from './api.schemas';
 
 import { customFetch } from '../custom-fetch';
@@ -369,5 +372,171 @@ export const useSair = <TError = ErrorType<unknown>,
         TContext
       > => {
       return useMutation(getSairMutationOptions(options));
+    }
+
+export const getListarLicoesUrl = () => {
+
+
+
+
+  return `/api/licoes`
+}
+
+/**
+ * @summary Lições com progresso do jogador
+ */
+export const listarLicoes = async ( options?: Parameters<typeof customFetch>[1]): Promise<Licao[]> => {
+
+  return customFetch<Licao[]>(getListarLicoesUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListarLicoesQueryKey = () => {
+    return [
+    `/api/licoes`
+    ] as const;
+    }
+
+
+export const getListarLicoesQueryOptions = <TData = Awaited<ReturnType<typeof listarLicoes>>, TError = ErrorType<Erro>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listarLicoes>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListarLicoesQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listarLicoes>>> = ({ signal }) => listarLicoes({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listarLicoes>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListarLicoesQueryResult = NonNullable<Awaited<ReturnType<typeof listarLicoes>>>
+export type ListarLicoesQueryError = ErrorType<Erro>
+
+
+/**
+ * @summary Lições com progresso do jogador
+ */
+
+export function useListarLicoes<TData = Awaited<ReturnType<typeof listarLicoes>>, TError = ErrorType<Erro>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listarLicoes>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListarLicoesQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getEnviarResultadoLicaoUrl = (id: number,) => {
+
+
+
+
+  return `/api/licoes/${id}/resultado`
+}
+
+/**
+ * @summary Enviar o resultado de uma lição
+ */
+export const enviarResultadoLicao = async (id: number,
+    resultadoLicaoInput: ResultadoLicaoInput, options?: Parameters<typeof customFetch>[1]): Promise<ResultadoLicao> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<ResultadoLicao>(getEnviarResultadoLicaoUrl(id),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(resultadoLicaoInput)
+  }
+);}
+
+
+
+
+
+export const getEnviarResultadoLicaoMutationKey = () => ['enviarResultadoLicao'] as const;
+
+export const getEnviarResultadoLicaoMutationOptions = <TError = ErrorType<Erro>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof enviarResultadoLicao>>, TError,EnviarResultadoLicaoMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof enviarResultadoLicao>>, TError,EnviarResultadoLicaoMutationVariables, TContext> => {
+
+const mutationKey = getEnviarResultadoLicaoMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof enviarResultadoLicao>>, EnviarResultadoLicaoMutationVariables> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  enviarResultadoLicao(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type EnviarResultadoLicaoMutationResult = NonNullable<Awaited<ReturnType<typeof enviarResultadoLicao>>>
+    export type EnviarResultadoLicaoMutationBody = BodyType<ResultadoLicaoInput>
+    export type EnviarResultadoLicaoMutationError = ErrorType<Erro>
+    export type EnviarResultadoLicaoMutationVariables = {id: number;data: BodyType<ResultadoLicaoInput>}
+
+    /**
+ * @summary Enviar o resultado de uma lição
+ */
+export const useEnviarResultadoLicao = <TError = ErrorType<Erro>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof enviarResultadoLicao>>, TError,EnviarResultadoLicaoMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof enviarResultadoLicao>>,
+        TError,
+        EnviarResultadoLicaoMutationVariables,
+        TContext
+      > => {
+      return useMutation(getEnviarResultadoLicaoMutationOptions(options));
     }
 

@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Keyboard, ArrowLeft, type LucideIcon } from "lucide-react";
 import { useTecladoFisico } from "@/hooks/use-sessao";
+import { Pintinho } from "@/components/milharal";
 
 export default function EmBreve({ titulo, frase, icone: Icone, precisaTeclado = false }: { titulo: string; frase: string; icone: LucideIcon; precisaTeclado?: boolean }) {
   const temTeclado = useTecladoFisico();
@@ -19,7 +20,8 @@ export default function EmBreve({ titulo, frase, icone: Icone, precisaTeclado = 
         </div>
         <p className="mt-5 inline-block rounded-full bg-secondary text-secondary-foreground px-4 py-1 font-bold">Em breve</p>
         <p className="mt-3 font-display text-2xl font-extrabold max-w-md mx-auto">{frase}</p>
-        <p className="mt-2 text-muted-foreground">Estamos preparando tudo com carinho. Volte logo!</p>
+        <p className="mt-2 text-muted-foreground">O milho ainda está crescendo por aqui. Volte logo!</p>
+        <Pintinho tamanho={70} className="mx-auto mt-4" />
         <Link href="/" data-testid="link-voltar-inicio" className="chunky-btn mt-6 inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-3 font-bold">
           <ArrowLeft className="h-5 w-5" aria-hidden="true" />Voltar ao início
         </Link>

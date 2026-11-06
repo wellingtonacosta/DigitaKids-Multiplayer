@@ -78,67 +78,67 @@
   --elevate-1: rgba(0, 0, 0, 0.03);
   --elevate-2: rgba(0, 0, 0, 0.08);
 
-  --background: 48 100% 96%;
+  --background: 46 62% 92%;
 
-  --foreground: 252 45% 16%;
+  --foreground: 150 38% 13%;
 
-  --border: 252 30% 82%;
+  --border: 42 38% 74%;
 
-  --card: 45 100% 99%;
+  --card: 48 80% 97%;
 
-  --card-foreground: 252 45% 16%;
+  --card-foreground: 150 38% 13%;
 
-  --card-border: 252 45% 16%;
+  --card-border: 150 38% 13%;
 
-  --sidebar: 252 62% 22%;
+  --sidebar: 152 42% 19%;
 
-  --sidebar-foreground: 48 100% 96%;
+  --sidebar-foreground: 48 85% 93%;
 
-  --sidebar-border: 252 40% 32%;
+  --sidebar-border: 150 30% 30%;
 
-  --sidebar-primary: 12 92% 58%;
+  --sidebar-primary: 44 96% 56%;
 
-  --sidebar-primary-foreground: 252 45% 12%;
+  --sidebar-primary-foreground: 150 38% 13%;
 
-  --sidebar-accent: 252 45% 30%;
+  --sidebar-accent: 150 34% 26%;
 
-  --sidebar-accent-foreground: 48 100% 96%;
+  --sidebar-accent-foreground: 48 85% 93%;
 
-  --sidebar-ring: 48 100% 60%;
+  --sidebar-ring: 44 96% 56%;
 
-  --popover: 45 100% 99%;
+  --popover: 48 80% 97%;
 
-  --popover-foreground: 252 45% 16%;
+  --popover-foreground: 150 38% 13%;
 
-  --popover-border: 252 30% 82%;
+  --popover-border: 42 38% 74%;
 
-  --primary: 12 90% 52%;
+  --primary: 6 68% 45%;
 
-  --primary-foreground: 45 100% 99%;
+  --primary-foreground: 48 85% 96%;
 
-  --secondary: 168 70% 40%;
+  --secondary: 138 42% 33%;
 
-  --secondary-foreground: 45 100% 99%;
+  --secondary-foreground: 48 85% 96%;
 
-  --muted: 46 70% 90%;
+  --muted: 44 52% 85%;
 
-  --muted-foreground: 252 20% 38%;
+  --muted-foreground: 150 18% 32%;
 
-  --accent: 48 100% 60%;
+  --accent: 44 96% 56%;
 
-  --accent-foreground: 252 45% 16%;
+  --accent-foreground: 150 38% 13%;
 
-  --destructive: 345 75% 45%;
+  --destructive: 2 62% 48%;
 
-  --destructive-foreground: 45 100% 99%;
+  --destructive-foreground: 48 85% 96%;
 
-  --input: 252 30% 70%;
-  --ring: 252 70% 50%;
-  --chart-1: 12 90% 52%;
-  --chart-2: 168 70% 40%;
-  --chart-3: 48 100% 60%;
-  --chart-4: 252 70% 55%;
-  --chart-5: 330 75% 60%;
+  --input: 42 30% 60%;
+  --ring: 6 68% 45%;
+  --chart-1: 6 68% 45%;
+  --chart-2: 138 42% 33%;
+  --chart-3: 44 96% 56%;
+  --chart-4: 28 70% 52%;
+  --chart-5: 200 45% 45%;
 
   --app-font-sans: 'Nunito', system-ui, sans-serif;
   --app-font-serif: Georgia, serif;
@@ -227,68 +227,68 @@
   --elevate-1: rgba(255, 255, 255, 0.04);
   --elevate-2: rgba(255, 255, 255, 0.09);
 
-  --background: 48 100% 96%;
+  --background: 46 62% 92%;
 
-  --foreground: 252 45% 16%;
+  --foreground: 150 38% 13%;
 
-  --border: 252 30% 82%;
+  --border: 42 38% 74%;
 
-  --card: 45 100% 99%;
+  --card: 48 80% 97%;
 
-  --card-foreground: 252 45% 16%;
+  --card-foreground: 150 38% 13%;
 
-  --card-border: 252 45% 16%;
+  --card-border: 150 38% 13%;
 
-  --sidebar: 252 62% 22%;
+  --sidebar: 152 42% 19%;
 
-  --sidebar-foreground: 48 100% 96%;
+  --sidebar-foreground: 48 85% 93%;
 
-  --sidebar-border: 252 40% 32%;
+  --sidebar-border: 150 30% 30%;
 
-  --sidebar-primary: 12 92% 58%;
+  --sidebar-primary: 44 96% 56%;
 
-  --sidebar-primary-foreground: 252 45% 12%;
+  --sidebar-primary-foreground: 150 38% 13%;
 
-  --sidebar-accent: 252 45% 30%;
+  --sidebar-accent: 150 34% 26%;
 
-  --sidebar-accent-foreground: 48 100% 96%;
+  --sidebar-accent-foreground: 48 85% 93%;
 
-  --sidebar-ring: 48 100% 60%;
+  --sidebar-ring: 44 96% 56%;
 
-  --popover: 45 100% 99%;
+  --popover: 48 80% 97%;
 
-  --popover-foreground: 252 45% 16%;
+  --popover-foreground: 150 38% 13%;
 
-  --popover-border: 252 30% 82%;
+  --popover-border: 42 38% 74%;
 
-  --primary: 12 90% 52%;
+  --primary: 6 68% 45%;
 
-  --primary-foreground: 45 100% 99%;
+  --primary-foreground: 48 85% 96%;
 
-  --secondary: 168 70% 40%;
+  --secondary: 138 42% 33%;
 
-  --secondary-foreground: 45 100% 99%;
+  --secondary-foreground: 48 85% 96%;
 
-  --muted: 46 70% 90%;
+  --muted: 44 52% 85%;
 
-  --muted-foreground: 252 20% 38%;
+  --muted-foreground: 150 18% 32%;
 
-  --accent: 48 100% 60%;
+  --accent: 44 96% 56%;
 
-  --accent-foreground: 252 45% 16%;
+  --accent-foreground: 150 38% 13%;
 
-  --destructive: 345 75% 45%;
+  --destructive: 2 62% 48%;
 
-  --destructive-foreground: 45 100% 99%;
+  --destructive-foreground: 48 85% 96%;
 
   /* Used as the border around inputs. Dark mode: Should be a border that is light enough to have high contrast when rendered on a --card background. More contrast than standard --border */
-  --input: 252 30% 70%;
-  --ring: 252 70% 50%;
-  --chart-1: 12 90% 52%;
-  --chart-2: 168 70% 40%;
-  --chart-3: 48 100% 60%;
-  --chart-4: 252 70% 55%;
-  --chart-5: 330 75% 60%;
+  --input: 42 30% 60%;
+  --ring: 6 68% 45%;
+  --chart-1: 6 68% 45%;
+  --chart-2: 138 42% 33%;
+  --chart-3: 44 96% 56%;
+  --chart-4: 28 70% 52%;
+  --chart-5: 200 45% 45%;
 
   --shadow-2xs: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0);
   --shadow-xs: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0);
@@ -445,3 +445,13 @@ body { font-size: 1.0625rem; }
 @keyframes bob { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-8px) rotate(3deg); } }
 .bob { animation: bob 3.2s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .rise, .bob { animation: none; } }
+
+.dots-bg { background-image: radial-gradient(hsl(var(--foreground) / .07) 1.5px, transparent 1.5px), repeating-linear-gradient(115deg, transparent 0 38px, hsl(var(--accent) / .10) 38px 40px); background-size: 22px 22px, auto; }
+.palha { background-image: repeating-linear-gradient(-12deg, hsl(var(--accent) / .18) 0 2px, transparent 2px 9px); }
+@keyframes pisca { 0%,100% { opacity: 1; transform: translateY(0); } 50% { opacity: .55; transform: translateY(2px); } }
+.pisca { animation: pisca .9s ease-in-out infinite; }
+@keyframes chacoalha { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+.chacoalha { animation: chacoalha .25s ease-in-out 2; }
+@keyframes pop { 0% { transform: scale(.4); opacity: 0; } 70% { transform: scale(1.15); opacity: 1; } 100% { transform: scale(1); } }
+.pop { animation: pop .5s cubic-bezier(.2,.8,.2,1) both; }
+@media (prefers-reduced-motion: reduce) { .pisca, .chacoalha, .pop { animation: none; } }

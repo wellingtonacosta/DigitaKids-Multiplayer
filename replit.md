@@ -30,7 +30,7 @@ _Populate as you build — non-obvious choices a reader couldn't infer from the 
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+DigitaKids: jogo em pt-BR para aprender a digitar (tema "Catar Milho"). Entrada por apelido, trilha de 8 aulas com teclado ABNT2, estrelas e pontos. Níveis: Pintinho, Galinha, Galo, Mestre do Milharal.
 
 ## User preferences
 
@@ -38,7 +38,9 @@ _Populate as you build — explicit user instructions worth remembering across s
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- A lógica de digitação (mapa ABNT2, WPM, precisão, estrelas, textos das lições) vive em `lib/typing-core`; servidor e navegador usam o mesmo código. Testes: `pnpm --filter @workspace/typing-core run test`.
+- As 8 lições são gravadas no banco na inicialização da API (`seed-licoes.ts`), a partir de `lib/typing-core/src/licoes.ts`.
+- Depois de mudar o OpenAPI: `pnpm --filter @workspace/api-spec run codegen`.
 
 ## Pointers
 
