@@ -2,23 +2,23 @@ import { useEffect, useRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { VideoCanvas, VideoPausedContext, type VideoAspectRatio, useVideoPlayer } from '@/lib/video';
 import { Abertura } from './scenes/Abertura';
-import { Apelido } from './scenes/Apelido';
-import { Avatar } from './scenes/Avatar';
-import { Privacidade } from './scenes/Privacidade';
-import { Volta } from './scenes/Volta';
-import { Inicio } from './scenes/Inicio';
+import { Risquinho } from './scenes/Risquinho';
+import { Indicadores } from './scenes/Indicadores';
+import { Dedos } from './scenes/Dedos';
+import { Polegares } from './scenes/Polegares';
+import { Treino } from './scenes/Treino';
 
 export const SCENE_DURATIONS = {
   abertura: 4400,
-  apelido: 6000,
-  avatar: 4350,
-  privacidade: 5700,
-  volta: 5500,
-  inicio: 5050,
+  risquinho: 6000,
+  indicadores: 4350,
+  dedos: 5700,
+  polegares: 5500,
+  treino: 5050,
 };
 
 const SCENE_COMPONENTS: Record<string, React.ComponentType> = {
-  abertura: Abertura, apelido: Apelido, avatar: Avatar, privacidade: Privacidade, volta: Volta, inicio: Inicio,
+  abertura: Abertura, risquinho: Risquinho, indicadores: Indicadores, dedos: Dedos, polegares: Polegares, treino: Treino,
 };
 
 const VIDEO_ASPECT_RATIO: VideoAspectRatio = '16:9';

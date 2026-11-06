@@ -1,22 +1,21 @@
-# DigitaKids — Fase 1: a porta de entrada (16:9, 31 s)
+# DigitaKids — Lição 1: Onde ficam as mãos (16:9, 31 s)
+
+Fonte do texto: artifacts/web/src/components/posicao-maos.tsx, maos.tsx, teclado-virtual.tsx, lib/dedos.ts e lib/typing-core/src/licoes.ts (lição 1 "Linha base").
 
 Treatment
-- Promise: entrar no DigitaKids é rápido e seguro — apelido + avatar, sem senha, sem e-mail, sem dados pessoais.
-- Identity: identidade do app web ("Milharal"): creme palha #F6EFD6, tinta verde #142E22, vermelho cerca #C2402F, milho #F7C531, verde #317A4A. Display: Bricolage Grotesque 800; apoio: Nunito; mono: Space Mono. Contornos grossos + sombra dura ("chunky").
-- Hero: o Pintinho e o cartão de entrada chunky.
-- Motion: pop elástico com sombra dura; digitação tecla a tecla; varredura de palha (wipe diagonal amarelo) entre cenas.
-- Arc: piada "catar milho" → regras do apelido → avatar → privacidade (riscos) → reconhecimento ao voltar → payoff tela inicial.
-- Payoff: tela inicial completa montada (Pintinho, 0 pontos, botão Começar) + selo "Fase 1".
+- Promise: indicadores no F e no J (no risquinho), os outros dedos ao lado, os polegares na barra de espaço, e depois de cada tecla volta para ela.
+- Identity: o visual Milharal (palha, tinta verde, vermelho da cerca, milho) mais as cores dos dedos do app: mindinho azul, anelar verde, dedo do meio amarelo, indicador vermelho, polegar cinza. Fontes: Bricolage Grotesque, Nunito, Space Mono.
+- Hero: a linha base ABNT2 (A S D F G H J K L Ç ~ + espaço) com o risquinho no F e no J, e as mãos do app.
+- Motion: as mãos descem de mola até as teclas, as teclas acendem na cor do dedo, a linha de treino é digitada.
 
-## Shots
-1. 0–4.4 s Abertura. Fundo verde escuro; pintinho bica teclas uma a uma (A… S…); texto "Catar milho?" pop; 2.2 s tudo é empurrado e surge "DigitaKids" gigante com espigas. Saída: wipe palha.
-2. 4.4–10.4 s Apelido. Cartão chunky à direita; campo digita "Teclinha22" (100 ms/tecla); contador x/16; à esquerda chips de regra entram em sequência: "3 a 16 letras ou números", "sem espaços", "nome único". 8.2 s o texto vira "teclinha22" com etiqueta "salvo em minúsculas".
-3. 10.4–14.75 s Avatar. Grade de 12 avatares coloridos em cascata; cursor de seleção pula 3 vezes e trava no galo; título "Escolha seu avatar".
-4. 14.75–20.45 s Privacidade. Três etiquetas grandes "Senha", "E-mail", "Dados pessoais" entram e são riscadas em vermelho uma a uma; depois "Só apelido + avatar." em faixa amarela.
-5. 20.45–25.95 s Volta. Dois cards: biscoito "cookie de sessão assinado · 30 dias" (contador dias) e "IP com hash" onde 189.42.17.8 vira embaralhado a3f9…; conclusão "Voltou no mesmo aparelho? Entra direto."
-6. 25.95–31 s Tela inicial. Cartão home monta: avatar + apelido, nível "Pintinho", "0 pontos" (odômetro), botão "Começar" pulsando; cerca sobe no rodapé; selo "Fase 1 ✓" no fim; loop volta à abertura escura.
+## Shots (cortes nos onsets da música: 4.4 / 10.4 / 14.75 / 20.45 / 25.95)
+1. 0–4.4 Abertura: "Lição 1 · antes de começar", "Onde ficam as mãos" sobe linha a linha; as mãos sobem; pintinho e espiga; selo "Linha base".
+2. 4.4–10.4 Risquinho: "Procure as teclas F e J." O teclado aparece e o F e o J acendem em vermelho; uma lupa mostra o risquinho; "Cada uma tem um risquinho em relevo." e depois "Passe o dedo e você sente!"
+3. 10.4–14.75 Passo 1: o texto do passo 1. A mão esquerda e depois a direita descem (indicadores vermelhos) sobre o F e o J; selo "Indicadores em F e J".
+4. 14.75–20.45 Passo 2: o texto do passo 2. D/K amarelo, S/L verde e A/Ç azul acendem em sequência, e os dedos das mãos acendem junto; a legenda de cores entra.
+5. 20.45–25.95 Passo 3 + explicação: o texto do passo 3, os polegares e o espaço acendem em cinza; o fundo escurece, as letras das teclas somem, e entra "O risquinho serve para você achar a posição sem olhar para o teclado."
+6. 25.95–31 Treino: a descrição da lição; a linha alvo "asdf jklç fdsa ..." é digitada e cada tecla acende; selo "Depois de cada tecla, volte para ela."; cerca no rodapé.
 
 ## Audio spec
-- Runtime: 31 s
-- Music: funk/nu-disco brincalhão infantil, 110 BPM, marimba, baixo, palmas; cortes movidos para onsets reais: 4.4, 10.4, 14.75, 20.45, 25.95 s; final resolvido. Sem vocais.
-- Playback file: bg_music.mp3
+- Runtime: 31 s (mantida a mesma faixa bg_music.mp3; o runtime não mudou)
+- Music: funk/nu-disco infantil, 110 BPM, sem vocais.
