@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: auth
+    description: Identificação simples por apelido
 paths:
   /healthz:
     get:
@@ -24,6 +26,73 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /auth/entrar:
+    post:
+      operationId: entrar
+      tags: [auth]
+      summary: Entrar ou cadastrar com apelido e avatar
+      description: Cria o jogador ou reconhece o mesmo jogador (apelido + identificação do computador) e inicia a sessão.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EntrarInput"
+      responses:
+        "200":
+          description: Jogador reconhecido ou criado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Jogador"
+        "400":
+          description: Apelido ou avatar inválido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+        "409":
+          description: Apelido já está em uso por outro jogador
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+        "429":
+          description: Muitas tentativas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+  /auth/eu:
+    get:
+      operationId: obterJogadorAtual
+      tags: [auth]
+      summary: Jogador da sessão atual
+      responses:
+        "200":
+          description: Jogador logado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Jogador"
+        "401":
+          description: Sem sessão
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+  /auth/sair:
+    post:
+      operationId: sair
+      tags: [auth]
+      summary: Encerrar a sessão
+      responses:
+        "200":
+          description: Sessão encerrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +102,49 @@ components:
           type: string
       required:
         - status
-
+    Erro:
+      type: object
+      properties:
+        erro:
+          type: string
+      required:
+        - erro
+    EntrarInput:
+      type: object
+      properties:
+        apelido:
+          type: string
+          description: 3 a 16 caracteres, letras e números, sem espaços
+        avatar:
+          type: string
+          description: Chave do avatar (avatar-1 até avatar-12)
+      required:
+        - apelido
+        - avatar
+    Jogador:
+      type: object
+      properties:
+        id:
+          type: integer
+        apelido:
+          type: string
+        avatar:
+          type: string
+        pontosTotais:
+          type: integer
+        nivel:
+          type: string
+          description: Aprendiz, Digitador, Veloz ou Mestre
+        sequenciaDias:
+          type: integer
+        novo:
+          type: boolean
+          description: Verdadeiro quando o cadastro acabou de ser criado
+      required:
+        - id
+        - apelido
+        - avatar
+        - pontosTotais
+        - nivel
+        - sequenciaDias
+        - novo

@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "DigitaKids"
+description = "Jogo gamificado em português do Brasil que ensina crianças de cerca de 12 anos a digitar com as dez dedos, com aulas progressivas, teclado virtual ABNT2, corridas multiplayer, ranking e perfil."
+version = "1.0.0"
+id = "artifacts/web"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22333
+
+[services.development]
+run = "pnpm --filter @workspace/web run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/web", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/web/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22333"
+BASE_PATH = "/"
