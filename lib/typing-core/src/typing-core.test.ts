@@ -159,3 +159,32 @@ test("dica personalizada fala da mão desequilibrada", () => {
   });
   assert.match(d, /mão esquerda/);
 });
+
+import { TEXTOS_CORRIDA, codigoValido, indiceMaximoPlausivel, pontosCorrida } from "./index";
+
+test("textos de corrida: 60 textos, 20 por nível, só com teclas ABNT2", () => {
+  assert.equal(TEXTOS_CORRIDA.length, 60);
+  for (const n of [1, 2, 3]) assert.equal(TEXTOS_CORRIDA.filter((t) => t.dificuldade === n).length, 20);
+  const vistos = new Set<string>();
+  for (const t of TEXTOS_CORRIDA) {
+    assert.doesNotThrow(() => toquesDoTexto(t.texto), t.texto);
+    assert.ok(!vistos.has(t.texto), "repetido: " + t.texto);
+    vistos.add(t.texto);
+    assert.equal(t.texto, t.texto.trim());
+  }
+});
+
+test("código de sala sem caracteres ambíguos", () => {
+  assert.equal(codigoValido("AB2CD"), true);
+  assert.equal(codigoValido("ABOCD"), false);
+  assert.equal(codigoValido("AB1CD"), false);
+  assert.equal(codigoValido("ABCD"), false);
+});
+
+test("limite de progresso e pontos da corrida", () => {
+  assert.ok(indiceMaximoPlausivel(1000, 100) < 30);
+  assert.equal(indiceMaximoPlausivel(600000, 100), 100);
+  assert.equal(pontosCorrida(1, 96), 60);
+  assert.equal(pontosCorrida(2, 90), 35);
+  assert.equal(pontosCorrida(5, 100), 25);
+});

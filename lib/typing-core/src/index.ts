@@ -5,3 +5,5 @@ export * from "./engine";
 export * from "./estrelas";
 export * from "./dicas";
 export * from "./licoes";
+export * from "./corrida";
+export * from "./textos-corrida";

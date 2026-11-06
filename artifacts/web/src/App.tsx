@@ -1,7 +1,7 @@
 import { type ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route, Switch, useLocation, Router as WouterRouter } from "wouter";
-import { Flag, Trophy, UserRound, RefreshCw } from "lucide-react";
+import { Trophy, UserRound, RefreshCw } from "lucide-react";
 import { useHealthCheck, getHealthCheckQueryKey } from "@workspace/api-client-react";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { Toaster } from "@/components/ui/toaster";
@@ -14,6 +14,8 @@ import Inicio from "@/pages/inicio";
 import EmBreve from "@/pages/em-breve";
 import Aulas from "@/pages/aulas";
 import LicaoPagina from "@/pages/licao";
+import Corridas from "@/pages/corridas";
+import SalaPagina from "@/pages/sala";
 
 const queryClient = new QueryClient();
 const ROTAS = ["/", "/aulas", "/corridas", "/ranking", "/perfil"];
@@ -46,7 +48,7 @@ function ErroConexao({ onRetry }: { onRetry: () => void }) {
 function Router() {
   const [loc] = useLocation();
   const { jogador, carregando, erro, refetch } = useSessao();
-  if (!ROTAS.includes(loc) && !/^\/aulas\/\d+$/.test(loc)) return <NotFound />;
+  if (!ROTAS.includes(loc) && !/^\/aulas\/\d+$/.test(loc) && !/^\/sala\/[A-Za-z0-9]{5}$/.test(loc)) return <NotFound />;
   if (carregando) return <Carregando />;
   if (erro) return <ErroConexao onRetry={() => refetch()} />;
   if (!jogador) return <Entrada />;
@@ -57,7 +59,8 @@ function Router() {
           <Route path="/">{() => <Inicio jogador={jogador} />}</Route>
           <Route path="/aulas" component={Aulas} />
           <Route path="/aulas/:id" component={LicaoPagina} />
-          <Route path="/corridas">{() => <EmBreve titulo="Corridas" icone={Flag} precisaTeclado frase="Prepare os dedos: a pista de digitação está quase pronta!" />}</Route>
+          <Route path="/corridas" component={Corridas} />
+          <Route path="/sala/:codigo" component={SalaPagina} />
           <Route path="/ranking">{() => <EmBreve titulo="Ranking" icone={Trophy} frase="Logo você vai ver seu nome subindo na tabela." />}</Route>
           <Route path="/perfil">{() => <EmBreve titulo="Perfil" icone={UserRound} frase="Suas medalhas e recordes vão morar aqui." />}</Route>
           <Route component={NotFound} />

@@ -12,6 +12,13 @@ function cookieValue(header: string | undefined, name: string): string | undefin
   return undefined;
 }
 
+export async function jogadorDoCookie(header: string | undefined): Promise<User | null> {
+  const id = readSessionToken(cookieValue(header, SESSION_COOKIE));
+  if (!id) return null;
+  const [u] = await db.select().from(usersTable).where(eq(usersTable.id, id));
+  return u ?? null;
+}
+
 export async function jogadorDaSessao(req: Request): Promise<User | null> {
   const id = readSessionToken(cookieValue(req.headers.cookie, SESSION_COOKIE));
   if (!id) return null;

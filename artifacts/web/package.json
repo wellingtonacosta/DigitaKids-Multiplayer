@@ -75,6 +75,7 @@
     "zod": "catalog:"
   },
   "dependencies": {
-    "@workspace/typing-core": "workspace:*"
+    "@workspace/typing-core": "workspace:*",
+    "socket.io-client": "^4.8.4"
   }
 }

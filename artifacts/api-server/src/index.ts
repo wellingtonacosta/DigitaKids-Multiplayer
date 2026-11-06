@@ -1,6 +1,8 @@
 import app from "./app";
 import { logger } from "./lib/logger";
 import { seedLicoes } from "./lib/seed-licoes";
+import { seedTextosCorrida } from "./lib/seed-textos";
+import { iniciarSocket } from "./lib/corridas/socket";
 
 const rawPort = process.env["PORT"];
 
@@ -18,11 +20,12 @@ if (Number.isNaN(port) || port <= 0) {
 
 try {
   await seedLicoes();
+  await seedTextosCorrida();
 } catch (err) {
   logger.error({ err }, "Não foi possível preparar as lições (o esquema do banco está atualizado?)");
 }
 
-app.listen(port, (err) => {
+const servidor = app.listen(port, (err) => {
   if (err) {
     logger.error({ err }, "Error listening on port");
     process.exit(1);
@@ -30,3 +33,9 @@ app.listen(port, (err) => {
 
   logger.info({ port }, "Server listening");
 });
+
+try {
+  await iniciarSocket(servidor);
+} catch (err) {
+  logger.error({ err }, "Não foi possível iniciar as corridas em tempo real");
+}
