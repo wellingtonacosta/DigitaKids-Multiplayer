@@ -1,6 +1,6 @@
 import { TECLAS, type TeclaFisica } from "@workspace/typing-core";
 import { Check, X } from "lucide-react";
-import { COR_DEDO } from "@/lib/dedos";
+import { COR_DEDO, LEGENDA_DEDOS } from "@/lib/dedos";
 import { cn } from "@/lib/utils";
 
 export type Flash = { code: string; tipo: "acerto" | "erro"; n: number } | null;
@@ -46,7 +46,7 @@ function Tecla({ k, alvo, flash, semOlhar, calor }: { k: TeclaFisica; alvo: bool
           <span className={cn(k.code === "Space" || k.code.startsWith("Shift") ? "text-[0.65em] font-sans" : "")}>{r.baixo}</span>
         </>
       )}
-      {(k.code === "KeyF" || k.code === "KeyJ") && <span className="absolute bottom-[0.3em] w-[0.7em] h-[2px] rounded bg-current opacity-60" aria-hidden="true" />}
+      {(k.code === "KeyF" || k.code === "KeyJ") && <span data-testid={"risquinho-" + k.code} className="absolute bottom-[0.28em] w-[1em] h-[0.18em] rounded-full bg-[hsl(150_38%_13%)] shadow-[0_1px_0_rgba(255,255,255,.7)]" aria-hidden="true" />}
       {f === "erro" && <X className="absolute -top-[0.5em] -right-[0.4em] h-[1em] w-[1em] rounded-full bg-primary text-primary-foreground p-[1px]" aria-hidden="true" />}
       {f === "acerto" && <Check className="absolute -top-[0.5em] -right-[0.4em] h-[1em] w-[1em] rounded-full bg-secondary text-secondary-foreground p-[1px]" aria-hidden="true" />}
       {calor !== undefined && calor > 0 && <span className="sr-only">{"tecla com erros"}</span>}
@@ -84,6 +84,15 @@ export function TecladoVirtual({ alvos = [], flash = null, semOlhar = false, cal
       <div className="mt-[0.4em] flex justify-between text-[0.7em] font-bold opacity-70 px-[0.3em]" aria-hidden="true">
         <span>mão esquerda</span><span>mão direita</span>
       </div>
+      {!calor && (
+        <ul className="mt-[0.5em] flex flex-wrap justify-center gap-x-[1em] gap-y-[0.3em] text-[0.75em] font-bold" aria-label="Cores dos dedos" data-testid="legenda-dedos">
+          {LEGENDA_DEDOS.map((l) => (
+            <li key={l.nome} className="inline-flex items-center gap-[0.35em]">
+              <span className="inline-block h-[1em] w-[1em] rounded-[0.25em] border-2" style={{ background: l.cor.clara, borderColor: l.cor.forte }} aria-hidden="true" />{l.nome}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

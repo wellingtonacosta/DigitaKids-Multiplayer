@@ -36,8 +36,8 @@ function Mao({ lado, ativos }: { lado: "esquerda" | "direita"; ativos: Dedo[] })
   );
 }
 
-export function Maos({ dedos }: { dedos: Dedo[] }) {
-  const texto = dedos.length ? "Use o " + dedos.map((d) => NOME_DEDO[d]).join(" e o ") : "";
+export function Maos({ dedos, legenda }: { dedos: Dedo[]; legenda?: string }) {
+  const texto = legenda ?? (dedos.length ? "Use o " + dedos.map((d) => NOME_DEDO[d]).join(" e o ") : "");
   return (
     <div className="flex items-end justify-center gap-[8%] min-w-0">
       <div className="w-[34%] max-w-[150px]"><Mao lado="esquerda" ativos={dedos} /></div>

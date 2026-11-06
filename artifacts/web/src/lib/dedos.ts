@@ -1,17 +1,31 @@
 import type { Dedo } from "@workspace/typing-core";
 
-/** Cor de cada dedo: forte (realce) e clara (tecla em repouso). */
+const AZUL = { forte: "#2563C9", clara: "#CFE0F8" };
+const VERDE = { forte: "#2E9E52", clara: "#CDEBD6" };
+const AMARELO = { forte: "#D9A90B", clara: "#FBEFB0" };
+const VERMELHO = { forte: "#D6453A", clara: "#F8CFCA" };
+const CINZA = { forte: "#6F757D", clara: "#E2E4E7" };
+
+/** Cor de cada dedo: forte (realce) e clara (tecla em repouso). Mesma cor nos dedos equivalentes das duas mãos. */
 export const COR_DEDO: Record<Dedo, { forte: string; clara: string }> = {
-  "mindinho-esquerdo": { forte: "#9B6FD0", clara: "#E6DAF5" },
-  "anelar-esquerdo": { forte: "#3D8FC6", clara: "#D4E8F5" },
-  "medio-esquerdo": { forte: "#2F9E6E", clara: "#D2EEDF" },
-  "indicador-esquerdo": { forte: "#E39A1E", clara: "#FBE6B8" },
-  polegar: { forte: "#A07A52", clara: "#EADBC8" },
-  "indicador-direito": { forte: "#E39A1E", clara: "#FBE6B8" },
-  "medio-direito": { forte: "#2F9E6E", clara: "#D2EEDF" },
-  "anelar-direito": { forte: "#3D8FC6", clara: "#D4E8F5" },
-  "mindinho-direito": { forte: "#9B6FD0", clara: "#E6DAF5" },
+  "mindinho-esquerdo": AZUL,
+  "anelar-esquerdo": VERDE,
+  "medio-esquerdo": AMARELO,
+  "indicador-esquerdo": VERMELHO,
+  polegar: CINZA,
+  "indicador-direito": VERMELHO,
+  "medio-direito": AMARELO,
+  "anelar-direito": VERDE,
+  "mindinho-direito": AZUL,
 };
+
+export const LEGENDA_DEDOS: { nome: string; cor: { forte: string; clara: string } }[] = [
+  { nome: "Mindinho", cor: AZUL },
+  { nome: "Anelar", cor: VERDE },
+  { nome: "Dedo do meio", cor: AMARELO },
+  { nome: "Indicador", cor: VERMELHO },
+  { nome: "Polegar", cor: CINZA },
+];
 
 const CHAVE_MUDO = "digitakids-mudo";
 export function lerMudo() {

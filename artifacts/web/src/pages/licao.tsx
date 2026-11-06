@@ -10,6 +10,7 @@ import { MotorDigitacao, codeDoShift, teclaPorCode, NOME_DEDO, type Dedo } from 
 import { useTecladoFisico } from "@/hooks/use-sessao";
 import { TecladoVirtual, type Flash } from "@/components/teclado-virtual";
 import { Maos } from "@/components/maos";
+import { PosicaoMaos } from "@/components/posicao-maos";
 import { Galo, Pintinho } from "@/components/milharal";
 import { Estrelas, AvisoTeclado } from "@/pages/aulas";
 import { lerMudo, salvarMudo, tocarSom } from "@/lib/dedos";
@@ -63,6 +64,7 @@ function Sessao({ licao, proximaId, voltar }: { licao: Licao; proximaId?: number
   const qc = useQueryClient();
   const enviar = useEnviarResultadoLicao();
   const [rodada, setRodada] = useState(0);
+  const [intro, setIntro] = useState(licao.ordem === 1);
   const motor = useMemo(() => new MotorDigitacao(licao.textoAlvo), [licao.textoAlvo, rodada]);
   const [, setTick] = useState(0);
   const [flash, setFlash] = useState<Flash>(null);
@@ -89,7 +91,7 @@ function Sessao({ licao, proximaId, voltar }: { licao: Licao; proximaId?: number
   }, [licao.id, qc]);
 
   useEffect(() => {
-    if (payload) return;
+    if (payload || intro) return;
     function onKey(e: KeyboardEvent) {
       if (e.ctrlKey || e.metaKey) return;
       if (e.code === "Tab" || e.code === "Escape") return;
@@ -123,7 +125,7 @@ function Sessao({ licao, proximaId, voltar }: { licao: Licao; proximaId?: number
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [motor, payload, submeter]);
+  }, [motor, payload, intro, submeter]);
 
   useEffect(() => {
     if (!flash) return;
@@ -156,6 +158,15 @@ function Sessao({ licao, proximaId, voltar }: { licao: Licao; proximaId?: number
   const progresso = Math.round((idx / chars.length) * 100);
 
   const live = <div className="sr-only" aria-live="assertive" role="status" data-testid="status-anuncio">{anuncio}</div>;
+
+  if (intro) {
+    return (
+      <div className="space-y-4 min-w-0">
+        {voltar}
+        <PosicaoMaos onComecar={() => setIntro(false)} />
+      </div>
+    );
+  }
 
   if (payload) {
     return (
@@ -193,6 +204,12 @@ function Sessao({ licao, proximaId, voltar }: { licao: Licao; proximaId?: number
             <button onClick={() => setSemOlhar((v) => !v)} aria-pressed={semOlhar} data-testid="button-sem-olhar"
               className={cn("inline-flex items-center gap-2 rounded-xl border-[3px] border-foreground px-3 py-2 font-bold", semOlhar ? "bg-foreground text-background" : "bg-card")}>
               {semOlhar ? <EyeOff className="h-5 w-5" aria-hidden="true" /> : <Eye className="h-5 w-5" aria-hidden="true" />}Sem olhar
+            </button>
+          )}
+          {licao.ordem === 1 && (
+            <button onClick={() => setIntro(true)} data-testid="button-ver-posicao"
+              className="inline-flex items-center gap-2 rounded-xl border-[3px] border-foreground bg-card px-3 py-2 font-bold">
+              <Hand className="h-5 w-5" aria-hidden="true" />Ver posição das mãos
             </button>
           )}
           <button onClick={() => { setMudo((m) => { salvarMudo(!m); return !m; }); }} aria-pressed={mudo} aria-label={mudo ? "Ligar som" : "Desligar som"} data-testid="button-mudo"
