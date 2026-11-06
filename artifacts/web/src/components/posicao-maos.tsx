@@ -1,7 +1,8 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, PlayCircle } from "lucide-react";
 import type { Dedo } from "@workspace/typing-core";
 import { Maos } from "@/components/maos";
 import { TecladoVirtual } from "@/components/teclado-virtual";
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 const REPOUSO: Dedo[] = [
   "mindinho-esquerdo", "anelar-esquerdo", "medio-esquerdo", "indicador-esquerdo",
@@ -32,6 +33,22 @@ export function PosicaoMaos({ onComecar }: { onComecar: () => void }) {
           O risquinho serve para você achar a posição sem olhar para o teclado. Depois de cada tecla, volte para ela.
         </p>
       </section>
+
+      <Dialog>
+        <DialogTrigger asChild>
+          <button data-testid="button-ver-animacao"
+            className="chunky-btn inline-flex items-center gap-2 rounded-xl bg-accent text-accent-foreground px-5 py-3 font-bold">
+            <PlayCircle className="h-5 w-5" aria-hidden="true" />Ver a animação da aula
+          </button>
+        </DialogTrigger>
+        <DialogContent className="max-w-4xl w-[95vw] p-3 sm:p-4">
+          <DialogTitle className="font-display text-xl font-extrabold">Onde ficam as mãos</DialogTitle>
+          <DialogDescription className="sr-only">Animação de 31 segundos que mostra a posição das mãos no teclado.</DialogDescription>
+          <div className="aspect-video w-full overflow-hidden rounded-xl border-2 border-foreground bg-black">
+            <iframe src="/fase1-video/" title="Animação: onde ficam as mãos" allow="autoplay" className="h-full w-full border-0" data-testid="iframe-animacao" />
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <Maos dedos={REPOUSO} legenda="Indicadores em F e J" />
       <TecladoVirtual alvos={TECLAS_REPOUSO} rotuloAria="Teclado com as mãos na posição inicial: A S D F e J K L Ç" />
