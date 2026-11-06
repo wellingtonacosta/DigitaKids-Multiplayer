@@ -1,0 +1,9 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "3KvLoGWv3ehaxf8yiAqLg"
+uri = "file://artifacts/fase1-video/public/audio/bg_music.mp3"
+type = "audio"
+title = "background music"
+description = "Generated music: Playful kids funk nu-disco instrumental for an explainer animation. Marimba, slap bass, hand claps, light whistle, 110 BPM, cheerful and bouncy, clear section changes every ~5 second…"

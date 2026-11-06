@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Nunito:wght@600;800;900&family=Space+Mono:wght@400;700&display=swap');
+@import 'tailwindcss';
+
+:root {
+  --palha: #F6EFD6;
+  --palha-2: #EADFB8;
+  --tinta: #142E22;
+  --verde: #317A4A;
+  --verde-escuro: #1C4A33;
+  --cerca: #C2402F;
+  --milho: #F7C531;
+  --laranja: #E07B1F;
+  --color-bg-light: #F6EFD6;
+  --font-display: 'Bricolage Grotesque', 'Nunito', sans-serif;
+  --font-body: 'Nunito', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+html, body, #root { margin: 0; height: 100%; background: var(--tinta); }
+body { font-family: var(--font-body); color: var(--tinta); -webkit-font-smoothing: antialiased; overflow: hidden; }
+.f-display { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.02em; }
+.f-mono { font-family: var(--font-mono); }
+.chunky { border: 0.28vw solid var(--tinta); box-shadow: 0.5vw 0.5vw 0 var(--tinta); }
+.dots { background-image: radial-gradient(rgba(20,46,34,.09) 0.14vw, transparent 0.15vw), repeating-linear-gradient(115deg, transparent 0 3.4vw, rgba(247,197,49,.14) 3.4vw 3.6vw); background-size: 2vw 2vw, auto; }
+.grain::after { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+@keyframes blink { 50% { opacity: 0; } }
+.caret { animation: blink .8s steps(1) infinite; }

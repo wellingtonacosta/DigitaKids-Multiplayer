@@ -1,0 +1,29 @@
+kind = "video"
+videoAspectRatio = "16:9"
+previewPath = "/fase1-video/"
+title = "DigitaKids - Fase 1"
+description = "Animação explicando a fase 1 do DigitaKids: entrada com apelido e avatar, sem senha."
+version = "1.0.0"
+id = "artifacts/fase1-video"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/fase1-video/" ]
+localPort = 19575
+
+[services.development]
+run = "pnpm --filter @workspace/fase1-video run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/fase1-video", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/fase1-video/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19575"
+BASE_PATH = "/fase1-video/"
