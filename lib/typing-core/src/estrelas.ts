@@ -4,8 +4,11 @@ export const PRECISAO_MINIMA = 90;
 
 export function calcularEstrelas(ordemLicao: number, wpm: number, precisao: number): 0 | 1 | 2 | 3 {
   if (precisao < PRECISAO_MINIMA) return 0;
-  const wpm2 = 6 + ordemLicao * 1.5;
-  const wpm3 = 10 + ordemLicao * 2.5;
+  // Depois da lição 8 as metas crescem devagar, para continuarem alcançáveis por crianças.
+  const base = Math.min(ordemLicao, 8);
+  const extra = Math.max(0, ordemLicao - 8);
+  const wpm2 = 6 + base * 1.5 + extra * 0.5;
+  const wpm3 = 10 + base * 2.5 + extra * 1;
   if (precisao >= 98 && wpm >= wpm3) return 3;
   if (precisao >= 95 && wpm >= wpm2) return 2;
   return 1;

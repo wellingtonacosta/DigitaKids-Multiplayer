@@ -88,8 +88,30 @@ test("Shift é da mão oposta", () => {
 });
 
 test("todas as lições usam só caracteres que existem no teclado ABNT2", () => {
-  assert.equal(LICOES.length, 8);
+  assert.equal(LICOES.length, 15);
+  LICOES.forEach((l, i) => assert.equal(l.ordem, i + 1));
   for (const l of LICOES) assert.doesNotThrow(() => toquesDoTexto(l.textoAlvo), `lição ${l.ordem}`);
+});
+
+test("lições 9 a 15 podem ser digitadas do início ao fim sem erros", () => {
+  for (const l of LICOES.filter((x) => x.ordem >= 9)) {
+    const m = new MotorDigitacao(l.textoAlvo, () => 0);
+    let ultimo: ReturnType<typeof m.processar> | null = null;
+    for (const toque of toquesDoTexto(l.textoAlvo)) {
+      ultimo = m.processar(ev(toque.code, toque.shift));
+      assert.equal(ultimo.tipo, "acerto", `lição ${l.ordem}`);
+    }
+    assert.ok(m.terminou, `lição ${l.ordem} terminou`);
+    assert.equal(m.resumo().erros, 0);
+  }
+});
+
+test("estrelas das lições 9 a 15 têm metas alcançáveis", () => {
+  assert.equal(calcularEstrelas(8, 30, 98), 3);
+  for (let o = 9; o <= 15; o++) {
+    assert.equal(calcularEstrelas(o, 40, 98), 3, "ordem " + o);
+    assert.equal(calcularEstrelas(o, 25, 95), 2, "ordem " + o);
+  }
 });
 
 test("motor: só avança com o toque certo e conta erros por tecla", () => {

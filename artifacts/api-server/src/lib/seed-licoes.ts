@@ -3,7 +3,7 @@ import { db, lessonsTable } from "@workspace/db";
 import { LICOES } from "@workspace/typing-core";
 import { logger } from "./logger";
 
-/** Grava ou atualiza as 8 lições (idempotente, pela ordem). */
+/** Grava ou atualiza as lições (idempotente, pela ordem). */
 export async function seedLicoes(): Promise<void> {
   const existentes = await db.select().from(lessonsTable);
   for (const l of LICOES) {
