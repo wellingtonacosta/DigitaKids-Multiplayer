@@ -166,7 +166,7 @@ function Pista({ j, total, eu }: { j: JogadorSala; total: number; eu: boolean })
 
 function Corrida({ estado, meuId }: { estado: EstadoSala; meuId: number }) {
   const texto = estado.texto ?? "";
-  const motor = useMemo(() => new MotorDigitacao(texto), [texto]);
+  const motor = useMemo(() => new MotorDigitacao(texto, Date.now, "caractere"), [texto]);
   const chars = useMemo(() => [...texto], [texto]);
   const [, setTick] = useState(0);
   const [agora, setAgora] = useState(agoraServidor);

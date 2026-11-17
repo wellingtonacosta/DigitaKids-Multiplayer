@@ -26,7 +26,7 @@ _Populate as you build — short repo map plus pointers to the source-of-truth f
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- Corridas conferem o caractere produzido; aulas mantêm a conferência da tecla física ABNT2. Motivo: a corrida não deve rejeitar uma letra correta por uso de Caps Lock ou outra posição de tecla, enquanto as aulas ensinam posições dos dedos.
 
 ## Product
 

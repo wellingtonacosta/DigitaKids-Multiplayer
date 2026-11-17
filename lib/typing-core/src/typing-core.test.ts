@@ -153,6 +153,41 @@ test("motor: conta teclas por mão", () => {
   assert.equal(s.teclasDireita, 1);
 });
 
+test("corrida: aceita maiúscula com Caps Lock, mas rejeita letra ou caixa errada", () => {
+  const m = new MotorDigitacao("Aa!", Date.now, "caractere");
+  assert.equal(m.processar({ ...ev("KeyA"), key: "a" }).tipo, "erro");
+  assert.equal(m.processar({ ...ev("KeyA"), key: "A" }).tipo, "acerto");
+  assert.equal(m.processar({ ...ev("KeyA", true), key: "a" }).tipo, "acerto");
+  assert.equal(m.processar({ ...ev("Digit1", true), key: "?" }).tipo, "erro");
+  assert.equal(m.processar({ ...ev("Digit1", true), key: "!" }).tipo, "acerto");
+  assert.equal(m.terminou, true);
+});
+
+test("corrida: aceita acento composto e sequência de tecla morta sem perder posição", () => {
+  const m = new MotorDigitacao("Áãç", Date.now, "caractere");
+  assert.equal(m.processar({ ...ev("KeyA"), key: "A" }).tipo, "erro");
+  assert.equal(m.processar({ ...ev("BracketLeft"), key: "Dead" }).tipo, "acerto");
+  assert.equal(m.indiceCaractere, 0);
+  assert.equal(m.processar({ ...ev("KeyA"), key: "Á" }).tipo, "acerto");
+  assert.equal(m.processar({ ...ev("Quote"), key: "Dead" }).tipo, "acerto");
+  assert.equal(m.processar({ ...ev("KeyA"), key: "a" }).tipo, "acerto");
+  assert.equal(m.processar({ ...ev("Semicolon"), key: "ç" }).tipo, "acerto");
+  assert.equal(m.terminou, true);
+  assert.equal(m.resumo().toquesCertos, 5);
+});
+
+test("corrida: todos os textos aceitam os caracteres corretos sem erros", () => {
+  for (const { texto } of TEXTOS_CORRIDA) {
+    const m = new MotorDigitacao(texto, Date.now, "caractere");
+    for (const key of texto) {
+      assert.equal(m.processar({ ...ev("Unidentified"), key }).tipo, "acerto", `${texto}: ${key}`);
+    }
+    assert.equal(m.terminou, true);
+    assert.equal(m.resumo().erros, 0);
+    assert.equal(m.resumo().toquesCertos, toquesDoTexto(texto).length);
+  }
+});
+
 test("estrelas: precisão abaixo de 90% não passa", () => {
   assert.equal(calcularEstrelas(1, 40, 89.9), 0);
   assert.equal(calcularEstrelas(1, 1, 90), 1);

@@ -49,7 +49,11 @@ export class MotorDigitacao {
   private esq = 0;
   private dir = 0;
 
-  constructor(texto: string, private readonly agora: () => number = () => Date.now()) {
+  constructor(
+    texto: string,
+    private readonly agora: () => number = () => Date.now(),
+    private readonly modo: "tecla" | "caractere" = "tecla",
+  ) {
     this.texto = texto;
     this.toques = toquesDoTexto(texto);
     let p = 0;
@@ -92,12 +96,34 @@ export class MotorDigitacao {
     const esperado = this.toques[this.pos]!;
     if (this.inicioMs === null) this.inicioMs = this.agora();
 
-    if (ev.code === esperado.code && ev.shiftKey === esperado.shift) {
-      this.pos++;
-      this.certos++;
-      const mao = contarMao(esperado.code);
-      if (mao === "esquerda") this.esq++;
-      else if (mao === "direita") this.dir++;
+    let quantidade = 0;
+    if (this.modo === "caractere") {
+      const alvo = [...this.texto][this.indiceCaractere]!;
+      if (ev.key.normalize("NFC") === alvo) {
+        // Caps Lock e layouts diferentes podem produzir a mesma letra.
+        const fim = this.inicios[this.indiceCaractere + 1] ?? this.toques.length;
+        quantidade = fim - this.pos;
+      } else if (esperado.morta) {
+        // Mantém a sequência física dos acentos no ABNT2.
+        if (ev.code === esperado.code && ev.shiftKey === esperado.shift
+          && (ev.key === "Dead" || ["´", "`", "~", "^"].includes(ev.key))) quantidade = 1;
+      } else if (this.progressoNoCaractere > 0 && ev.code === esperado.code
+        && ev.key === alvo.normalize("NFD")[0]) {
+        // Com preventDefault, alguns navegadores entregam a letra-base após o acento.
+        quantidade = 1;
+      }
+    } else if (ev.code === esperado.code && ev.shiftKey === esperado.shift) {
+      quantidade = 1;
+    }
+
+    if (quantidade > 0) {
+      for (let i = 0; i < quantidade; i++) {
+        const mao = contarMao(this.toques[this.pos]!.code);
+        if (mao === "esquerda") this.esq++;
+        else if (mao === "direita") this.dir++;
+        this.pos++;
+        this.certos++;
+      }
       if (this.terminou) this.fimMs = this.agora();
       return { tipo: "acerto", terminou: this.terminou };
     }
