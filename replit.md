@@ -34,7 +34,7 @@ DigitaKids: jogo em pt-BR para aprender a digitar (tema "Catar Milho"). Entrada 
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+- Salas de corrida devem aguardar até 20 minutos após desconexão antes de expirar.
 
 ## Gotchas
 
