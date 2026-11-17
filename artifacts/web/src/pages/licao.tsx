@@ -233,13 +233,13 @@ function Sessao({ licao, proximaId, voltar }: { licao: Licao; proximaId?: number
         <div className="h-3 rounded-full bg-muted border-2 border-foreground overflow-hidden mb-4" role="progressbar" aria-valuenow={progresso} aria-valuemin={0} aria-valuemax={100} aria-label="Progresso">
           <div className="h-full bg-accent origin-left transition-transform duration-200" style={{ transform: `scaleX(${progresso / 100})` }} />
         </div>
-        <p className="font-mono text-[clamp(1.5rem,5vw,2.6rem)] lg:text-[clamp(1.5rem,1.7vw,2.1rem)] leading-[1.6] tracking-wide break-words select-none" data-testid="text-alvo" aria-label={licao.textoAlvo}>
+        <p className="font-mono text-[clamp(1.5rem,5vw,2.6rem)] lg:text-[clamp(1.5rem,1.7vw,2.1rem)] leading-[1.6] tracking-wide break-words whitespace-pre-wrap select-none" data-testid="text-alvo" aria-label={licao.textoAlvo}>
           {chars.map((c, i) => (
             <span key={i} aria-hidden="true" className={cn("rounded-md px-[1px]",
               i < idx && "text-secondary",
               i === idx && (erroMsg ? "bg-[#F6B3AA] outline outline-[3px] outline-primary" : "bg-accent outline outline-[3px] outline-foreground"),
               i > idx && "text-foreground/55")}>
-              {c === " " ? (i === idx ? "\u2423" : "\u00a0") : c}
+              {c === " " ? (i === idx ? "\u2423" : " ") : c}
             </span>
           ))}
         </p>

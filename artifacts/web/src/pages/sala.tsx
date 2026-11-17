@@ -217,13 +217,13 @@ function Corrida({ estado, meuId }: { estado: EstadoSala; meuId: number }) {
             </div>
           </div>
         )}
-        <p className="font-mono text-[clamp(1.3rem,4.2vw,2.2rem)] leading-[1.6] tracking-wide break-words select-none" data-testid="text-alvo" aria-label={texto}>
+        <p className="font-mono text-[clamp(1.3rem,4.2vw,2.2rem)] leading-[1.6] tracking-wide break-words whitespace-pre-wrap select-none" data-testid="text-alvo" aria-label={texto}>
           {chars.map((c, i) => (
             <span key={i} aria-hidden="true" className={cn("rounded-md px-[1px]",
               i < idx && "text-secondary",
               i === idx && (erroMsg ? "bg-[#F6B3AA] outline outline-[3px] outline-primary" : "bg-accent outline outline-[3px] outline-foreground"),
               i > idx && "text-foreground/55")}>
-              {c === " " ? (i === idx ? "\u2423" : "\u00a0") : c}
+              {c === " " ? (i === idx ? "\u2423" : " ") : c}
             </span>
           ))}
         </p>
