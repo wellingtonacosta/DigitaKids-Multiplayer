@@ -17,17 +17,22 @@ const btn = "chunky-btn inline-flex justify-center items-center gap-2 rounded-xl
 export default function SalaPagina() {
   const { codigo: bruto } = useParams<{ codigo: string }>();
   const codigo = (bruto ?? "").toUpperCase();
-  const { estado, erroConexao } = useSala();
+  const { estado, conectado, erroConexao } = useSala();
   const { jogador } = useSessao();
   const temTeclado = useTecladoFisico();
   const [erro, setErro] = useState<string | null>(null);
   const [, go] = useLocation();
 
   useEffect(() => {
+    if (!conectado) return;
     let vivo = true;
     setErro(null);
     salaApi.entrar(codigo).then((r) => { if (vivo && !r.ok) setErro(r.erro); });
-    return () => { vivo = false; salaApi.sair(); };
+    return () => { vivo = false; };
+  }, [codigo, conectado]);
+
+  useEffect(() => {
+    return () => { void salaApi.sair(); };
   }, [codigo]);
 
   const voltar = (
@@ -58,6 +63,11 @@ export default function SalaPagina() {
 
   return (
     <div className="space-y-5 min-w-0">
+      {!conectado && (
+        <p role="status" className="rounded-xl border-2 border-foreground bg-accent p-3 font-bold">
+          A conexão caiu. Estamos tentando voltar à sala automaticamente…
+        </p>
+      )}
       <div className="flex flex-wrap items-center justify-between gap-3">
         {voltar}
         <button onClick={sair} data-testid="button-sair-sala" className="inline-flex items-center gap-2 rounded-xl border-[3px] border-foreground bg-card px-3 py-2 font-bold">

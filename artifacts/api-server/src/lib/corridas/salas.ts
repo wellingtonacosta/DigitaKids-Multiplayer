@@ -44,7 +44,8 @@ const CRIACOES = new Map<number, number[]>();
 const TEMPO_MAX_CORRIDA_MS = 5 * 60 * 1000;
 const FIM_APOS_PRIMEIRO_MS = 60 * 1000;
 const SALA_VAZIA_MS = 2 * 60 * 1000;
-const CARENCIA_SAIDA_MS = 10 * 1000;
+// Preserva o convite durante quedas breves de rede e recarregamentos.
+const CARENCIA_SAIDA_MS = SALA_VAZIA_MS;
 
 let textos: { id: number; text: string }[] = [];
 let emitir: (codigo: string, estado: EstadoSala) => void = () => {};
