@@ -9,4 +9,8 @@ import type { ObterRankingTipo } from './obterRankingTipo';
 
 export type ObterRankingParams = {
 tipo?: ObterRankingTipo;
+/**
+ * @minimum 1
+ */
+pagina?: number;
 };

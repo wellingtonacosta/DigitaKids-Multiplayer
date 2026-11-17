@@ -66,9 +66,13 @@ export const SairResponse = zod.object({
  * @summary Ranking dos jogadores
  */
 export const obterRankingQueryTipoDefault = `pontos`;
+export const obterRankingQueryPaginaDefault = 1;
+
+
 
 export const ObterRankingQueryParams = zod.object({
-  "tipo": zod.enum(['pontos', 'velocidade']).default(obterRankingQueryTipoDefault)
+  "tipo": zod.enum(['pontos', 'velocidade']).default(obterRankingQueryTipoDefault),
+  "pagina": zod.coerce.number().int().min(1).default(obterRankingQueryPaginaDefault)
 })
 
 export const ObterRankingResponse = zod.object({
@@ -88,8 +92,11 @@ export const ObterRankingResponse = zod.object({
   "avatar": zod.string(),
   "nivel": zod.string(),
   "valor": zod.number().describe('Pontos ou palavras por minuto, conforme o tipo')
-}),zod.null()]).describe('Posição de quem está jogando (nulo se ainda não tem marca neste ranking)'),
-  "totalJogadores": zod.number().int()
+}),zod.null()]).describe('Posição geral de quem está jogando, mesmo fora da página atual'),
+  "totalJogadores": zod.number().int(),
+  "pagina": zod.number().int(),
+  "totalPaginas": zod.number().int(),
+  "porPagina": zod.number().int()
 })
 
 

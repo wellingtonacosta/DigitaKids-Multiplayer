@@ -9,8 +9,8 @@ import { cn } from "@/lib/utils";
 
 type Tipo = "pontos" | "velocidade";
 const ABAS: { id: Tipo; t: string; i: typeof Star; d: string }[] = [
-  { id: "pontos", t: "Pontos", i: Star, d: "Quem já colheu mais espigas somando tudo." },
-  { id: "velocidade", t: "Velocidade", i: Gauge, d: "A melhor marca de palavras por minuto de cada um." },
+  { id: "pontos", t: "Pontos", i: Star, d: "Todos os jogadores, de quem já pontuou a quem está começando." },
+  { id: "velocidade", t: "Velocidade", i: Gauge, d: "A melhor marca de cada jogador nas aulas. Quem ainda não tem marca aparece com 0 ppm." },
 ];
 const CORES_PODIO = ["bg-accent", "bg-[#D2EEDF]", "bg-[#FBE6B8]"];
 
@@ -39,9 +39,10 @@ function Linha({ it, tipo, voce, i }: { it: ItemRanking; tipo: Tipo; voce: boole
 
 export default function Ranking() {
   const [tipo, setTipo] = useState<Tipo>("pontos");
+  const [pagina, setPagina] = useState(1);
   const { jogador } = useSessao();
-  const params = { tipo };
-  const q = useObterRanking(params, { query: { queryKey: getObterRankingQueryKey(params) } });
+  const params = { tipo, pagina };
+  const q = useObterRanking(params, { query: { queryKey: getObterRankingQueryKey(params), refetchInterval: 30000 } });
   const aba = ABAS.find((a) => a.id === tipo)!;
   const r = q.data;
   const voce = r?.voce ?? null;
@@ -52,6 +53,7 @@ export default function Ranking() {
     e.preventDefault();
     const n = tipo === "pontos" ? "velocidade" : "pontos";
     setTipo(n);
+    setPagina(1);
     document.getElementById("aba-" + n)?.focus();
   }
 
@@ -71,7 +73,7 @@ export default function Ranking() {
           const sel = a.id === tipo;
           return (
             <button key={a.id} id={"aba-" + a.id} role="tab" aria-selected={sel} aria-controls="painel-ranking" tabIndex={sel ? 0 : -1}
-              onClick={() => setTipo(a.id)} data-testid={"tab-ranking-" + a.id}
+              onClick={() => { setTipo(a.id); setPagina(1); }} data-testid={"tab-ranking-" + a.id}
               className={cn("chunky-btn flex-1 sm:flex-none inline-flex justify-center items-center gap-2 rounded-xl px-4 py-2.5 font-bold text-lg focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-primary",
                 sel ? "bg-secondary text-secondary-foreground" : "bg-card")}>
               <a.i className="h-5 w-5" aria-hidden="true" />{a.t}
@@ -115,6 +117,24 @@ export default function Ranking() {
             <ol className="space-y-3" aria-label={"Ranking de " + aba.t.toLowerCase()} data-testid="list-ranking">
               {r.itens.map((it, i) => <Linha key={it.jogadorId} it={it} tipo={tipo} voce={voce?.jogadorId === it.jogadorId} i={i} />)}
             </ol>
+            <nav aria-label="Páginas do ranking" className="flex flex-wrap items-center justify-center gap-3">
+              <button type="button" disabled={r.pagina <= 1 || q.isFetching}
+                onClick={() => setPagina(r.pagina - 1)} data-testid="button-ranking-anterior"
+                className="chunky-btn rounded-xl bg-card px-4 py-2 font-bold disabled:opacity-50">
+                Anterior
+              </button>
+              <p role="status" className="font-semibold" data-testid="text-ranking-pagina">
+                Página {r.pagina} de {r.totalPaginas}
+              </p>
+              <button type="button" disabled={r.pagina >= r.totalPaginas || q.isFetching}
+                onClick={() => setPagina(r.pagina + 1)} data-testid="button-ranking-proxima"
+                className="chunky-btn rounded-xl bg-card px-4 py-2 font-bold disabled:opacity-50">
+                Próxima
+              </button>
+            </nav>
+            <p className="text-sm text-center text-muted-foreground">
+              Em caso de empate, quem se cadastrou primeiro aparece antes.
+            </p>
             {voce && !voceNaLista && (
               <div className="space-y-2" data-testid="card-sua-posicao">
                 <p className="text-center font-bold text-muted-foreground" aria-hidden="true">· · ·</p>

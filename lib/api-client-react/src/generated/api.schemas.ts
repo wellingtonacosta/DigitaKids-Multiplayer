@@ -94,9 +94,12 @@ export const RankingTipo = {
 export interface Ranking {
   tipo: RankingTipo;
   itens: ItemRanking[];
-  /** Posição de quem está jogando (nulo se ainda não tem marca neste ranking) */
+  /** Posição geral de quem está jogando, mesmo fora da página atual */
   voce: ItemRanking | null;
   totalJogadores: number;
+  pagina: number;
+  totalPaginas: number;
+  porPagina: number;
 }
 
 export interface Perfil {
@@ -160,6 +163,10 @@ export interface Jogador {
 
 export type ObterRankingParams = {
 tipo?: ObterRankingTipo;
+/**
+ * @minimum 1
+ */
+pagina?: number;
 };
 
 export type ObterRankingTipo = typeof ObterRankingTipo[keyof typeof ObterRankingTipo];

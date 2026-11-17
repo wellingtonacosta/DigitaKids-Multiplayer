@@ -114,13 +114,26 @@ paths:
             type: string
             enum: [pontos, velocidade]
             default: pontos
+        - name: pagina
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
       responses:
         "200":
-          description: Os 20 primeiros e a posição de quem está jogando
+          description: Página com até 20 jogadores e a posição geral de quem está jogando
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Ranking"
+        "400":
+          description: Parâmetros inválidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
         "401":
           description: Sem sessão
           content:
@@ -392,14 +405,23 @@ components:
           allOf:
             - $ref: "#/components/schemas/ItemRanking"
           nullable: true
-          description: Posição de quem está jogando (nulo se ainda não tem marca neste ranking)
+          description: Posição geral de quem está jogando, mesmo fora da página atual
         totalJogadores:
+          type: integer
+        pagina:
+          type: integer
+        totalPaginas:
+          type: integer
+        porPagina:
           type: integer
       required:
         - tipo
         - itens
         - voce
         - totalJogadores
+        - pagina
+        - totalPaginas
+        - porPagina
     Perfil:
       type: object
       properties:
