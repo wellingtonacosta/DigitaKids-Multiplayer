@@ -503,7 +503,7 @@ components:
           type: integer
         nivel:
           type: string
-          description: Pintinho, Galinha, Galo ou Mestre do Milharal
+          description: Aprendiz, Digitador, Ninja do Teclado ou Mestre das Teclas
         sequenciaDias:
           type: integer
         novo:

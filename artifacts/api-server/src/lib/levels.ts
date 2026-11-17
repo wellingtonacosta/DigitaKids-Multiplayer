@@ -1,6 +1,6 @@
 import { nivelPorPontos } from "@workspace/typing-core";
 
-/** Pintinho, Galinha, Galo ou Mestre do Milharal. */
+/** Aprendiz, Digitador, Ninja do Teclado ou Mestre das Teclas. */
 export function levelFor(points: number): string {
   return nivelPorPontos(points);
 }

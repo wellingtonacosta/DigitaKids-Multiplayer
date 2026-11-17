@@ -164,7 +164,7 @@ router.post("/licoes/:id/resultado", rateLimit(30, 10 * 60 * 1000), async (req, 
     pontosGanhos,
     pontosTotais,
     nivel,
-    subiuDeNivel: nivel !== user.level,
+    subiuDeNivel: nivel !== levelFor(user.totalPoints),
     proximaLicaoDesbloqueada:
       estrelas >= 1 && !jaDestravada && lessons.some((l) => l.order === licao.order + 1),
     melhorou: estrelas > melhorAntes,

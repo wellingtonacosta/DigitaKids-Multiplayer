@@ -3,11 +3,12 @@ import { sql } from "drizzle-orm";
 import { db } from "@workspace/db";
 import { ObterRankingQueryParams, ObterRankingResponse } from "@workspace/api-zod";
 import { jogadorDaSessao } from "../lib/sessao";
+import { levelFor } from "../lib/levels";
 
 const router: IRouter = Router();
 const LIMITE = 20;
 
-type Linha = { id: number; nickname: string; avatar: string; level: string; valor: number };
+type Linha = { id: number; nickname: string; avatar: string; total_points: number; valor: number };
 
 router.get("/ranking", async (req, res): Promise<void> => {
   const user = await jogadorDaSessao(req);
@@ -20,10 +21,10 @@ router.get("/ranking", async (req, res): Promise<void> => {
 
   const consulta =
     tipo === "velocidade"
-      ? sql`select u.id, u.nickname, u.avatar, u.level, max(r.wpm)::float as valor
+      ? sql`select u.id, u.nickname, u.avatar, u.total_points, max(r.wpm)::float as valor
             from users u join lesson_results r on r.user_id = u.id
             group by u.id order by valor desc, u.id asc`
-      : sql`select u.id, u.nickname, u.avatar, u.level, u.total_points::float as valor
+      : sql`select u.id, u.nickname, u.avatar, u.total_points, u.total_points::float as valor
             from users u where u.total_points > 0
             order by u.total_points desc, u.id asc`;
   const linhas = (await db.execute(consulta)).rows as unknown as Linha[];
@@ -33,7 +34,7 @@ router.get("/ranking", async (req, res): Promise<void> => {
     jogadorId: l.id,
     apelido: l.nickname,
     avatar: l.avatar,
-    nivel: l.level,
+    nivel: levelFor(l.total_points),
     valor: Number(l.valor),
   }));
   res.json(

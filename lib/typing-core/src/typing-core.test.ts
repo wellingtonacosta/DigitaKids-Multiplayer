@@ -166,10 +166,10 @@ test("pontos e nível", () => {
   assert.equal(calcularPontos(3, 100, 0), 75);
   assert.equal(calcularPontos(1, 92, 0), 20);
   assert.equal(calcularPontos(1, 92, 1), 5);
-  assert.equal(nivelPorPontos(0), "Pintinho");
-  assert.equal(nivelPorPontos(200), "Galinha");
-  assert.equal(nivelPorPontos(800), "Galo");
-  assert.equal(nivelPorPontos(2000), "Mestre do Milharal");
+  assert.equal(nivelPorPontos(0), "Aprendiz");
+  assert.equal(nivelPorPontos(200), "Digitador");
+  assert.equal(nivelPorPontos(800), "Ninja do Teclado");
+  assert.equal(nivelPorPontos(2000), "Mestre das Teclas");
 });
 
 test("dica personalizada fala da mão desequilibrada", () => {

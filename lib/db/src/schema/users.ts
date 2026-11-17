@@ -9,7 +9,7 @@ export const usersTable = pgTable(
     avatar: text("avatar").notNull(),
     recoveryHash: text("recovery_hash"),
     totalPoints: integer("total_points").notNull().default(0),
-    level: text("level").notNull().default("Pintinho"),
+    level: text("level").notNull().default("Aprendiz"),
     streak: integer("streak").notNull().default(0),
     lastPlayedAt: timestamp("last_played_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),

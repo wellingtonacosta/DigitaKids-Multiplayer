@@ -8,6 +8,7 @@ import { NIVEIS } from "@workspace/typing-core";
 import { jogadorDaSessao } from "../lib/sessao";
 import { sequenciaVisivel } from "../lib/sequencia";
 import { CATALOGO } from "../lib/medalhas";
+import { levelFor } from "../lib/levels";
 
 const router: IRouter = Router();
 
@@ -34,7 +35,8 @@ router.get("/perfil", async (req, res): Promise<void> => {
   const concluidas = [...melhorPorLicao.values()].filter((e) => e >= 1).length;
   const estrelasTotais = [...melhorPorLicao.values()].reduce((a, n) => a + n, 0);
 
-  const idx = NIVEIS.findIndex((n) => n.nome === user.level);
+  const nivel = levelFor(user.totalPoints);
+  const idx = NIVEIS.findIndex((n) => n.nome === nivel);
   const proximo = idx >= 0 ? NIVEIS[idx + 1] : undefined;
   const quando = new Map(ganhas.map((g) => [g.key, g.earnedAt]));
 
@@ -42,7 +44,7 @@ router.get("/perfil", async (req, res): Promise<void> => {
     ObterPerfilResponse.parse({
       apelido: user.nickname,
       avatar: user.avatar,
-      nivel: user.level,
+      nivel,
       pontosTotais: user.totalPoints,
       pontosProximoNivel: proximo ? Math.max(0, proximo.minimo - user.totalPoints) : null,
       proximoNivel: proximo?.nome ?? null,

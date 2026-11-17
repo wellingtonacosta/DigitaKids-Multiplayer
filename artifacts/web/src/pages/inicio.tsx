@@ -5,7 +5,7 @@ import { Avatar } from "@/components/avatar-jogador";
 import { cn } from "@/lib/utils";
 import { Galo } from "@/components/milharal";
 
-const NIVEIS = ["Pintinho", "Galinha", "Galo", "Mestre do Milharal"];
+const NIVEIS = ["Aprendiz", "Digitador", "Ninja do Teclado", "Mestre das Teclas"];
 const LIMIARES = [0, 200, 800, 2000];
 const ATALHOS = [
   { href: "/aulas", t: "Aulas", d: "Cada dedo ganha sua casinha no teclado.", i: BookOpen, c: "bg-primary text-primary-foreground", r: "-rotate-1" },
@@ -36,7 +36,7 @@ export default function Inicio({ jogador }: { jogador: Jogador }) {
           <ol className="mt-3 flex gap-1.5" aria-label={"Nível " + (idx + 1) + " de 4"}>
             {NIVEIS.map((n, i) => <li key={n} title={n} className={cn("h-3 flex-1 rounded-full border-2 border-foreground", i <= idx ? "bg-primary" : "bg-muted")} />)}
           </ol>
-          <p className="mt-2 text-sm text-muted-foreground font-semibold">{prox !== undefined ? `Faltam ${Math.max(0, prox - jogador.pontosTotais).toLocaleString("pt-BR")} pontos para virar ${NIVEIS[idx + 1]}` : "Você chegou ao topo do milharal!"}</p>
+          <p className="mt-2 text-sm text-muted-foreground font-semibold">{prox !== undefined ? `Faltam ${Math.max(0, prox - jogador.pontosTotais).toLocaleString("pt-BR")} pontos para virar ${NIVEIS[idx + 1]}` : "Você chegou ao nível máximo!"}</p>
         </div>
         <div className="chunky rounded-2xl bg-accent p-5 rise" style={{animationDelay:".16s"}}>
           <p className="font-bold flex items-center gap-2"><Star className="h-5 w-5" aria-hidden="true" />Pontos</p>

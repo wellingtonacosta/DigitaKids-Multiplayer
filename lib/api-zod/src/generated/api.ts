@@ -32,7 +32,7 @@ export const EntrarResponse = zod.object({
   "apelido": zod.string(),
   "avatar": zod.string(),
   "pontosTotais": zod.number().int(),
-  "nivel": zod.string().describe('Pintinho, Galinha, Galo ou Mestre do Milharal'),
+  "nivel": zod.string().describe('Aprendiz, Digitador, Ninja do Teclado ou Mestre das Teclas'),
   "sequenciaDias": zod.number().int(),
   "novo": zod.boolean().describe('Verdadeiro quando o cadastro acabou de ser criado'),
   "codigoRecuperacao": zod.string().nullish().describe('Código para recuperar a conta. Só vem quando acabou de ser gerado; fica nulo nas outras respostas.')
@@ -47,7 +47,7 @@ export const ObterJogadorAtualResponse = zod.object({
   "apelido": zod.string(),
   "avatar": zod.string(),
   "pontosTotais": zod.number().int(),
-  "nivel": zod.string().describe('Pintinho, Galinha, Galo ou Mestre do Milharal'),
+  "nivel": zod.string().describe('Aprendiz, Digitador, Ninja do Teclado ou Mestre das Teclas'),
   "sequenciaDias": zod.number().int(),
   "novo": zod.boolean().describe('Verdadeiro quando o cadastro acabou de ser criado'),
   "codigoRecuperacao": zod.string().nullish().describe('Código para recuperar a conta. Só vem quando acabou de ser gerado; fica nulo nas outras respostas.')

@@ -23,10 +23,10 @@ export function calcularPontos(estrelas: number, precisao: number, melhorAnterio
 }
 
 export const NIVEIS = [
-  { nome: "Pintinho", minimo: 0 },
-  { nome: "Galinha", minimo: 200 },
-  { nome: "Galo", minimo: 800 },
-  { nome: "Mestre do Milharal", minimo: 2000 },
+  { nome: "Aprendiz", minimo: 0 },
+  { nome: "Digitador", minimo: 200 },
+  { nome: "Ninja do Teclado", minimo: 800 },
+  { nome: "Mestre das Teclas", minimo: 2000 },
 ] as const;
 
 export function nivelPorPontos(pontos: number): string {

@@ -11,7 +11,7 @@ export interface Jogador {
   apelido: string;
   avatar: string;
   pontosTotais: number;
-  /** Pintinho, Galinha, Galo ou Mestre do Milharal */
+  /** Aprendiz, Digitador, Ninja do Teclado ou Mestre das Teclas */
   nivel: string;
   sequenciaDias: number;
   /** Verdadeiro quando o cadastro acabou de ser criado */

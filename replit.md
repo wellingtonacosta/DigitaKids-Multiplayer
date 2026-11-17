@@ -30,7 +30,7 @@ _Populate as you build — non-obvious choices a reader couldn't infer from the 
 
 ## Product
 
-DigitaKids: jogo em pt-BR para aprender a digitar (tema "Catar Milho"). Entrada por apelido, trilha de 8 aulas com teclado ABNT2, estrelas e pontos. Níveis: Pintinho, Galinha, Galo, Mestre do Milharal.
+DigitaKids: jogo em pt-BR para aprender a digitar (tema "Catar Milho"). Entrada por apelido, trilha de 15 aulas com teclado ABNT2, estrelas e pontos. Níveis: Aprendiz, Digitador, Ninja do Teclado, Mestre das Teclas.
 
 ## User preferences
 

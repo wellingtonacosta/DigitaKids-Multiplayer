@@ -16,6 +16,7 @@ import {
 import { AVATARS, NICKNAME_RE, hasBadWord } from "../lib/nickname";
 import { rateLimit } from "../lib/rateLimit";
 import { sequenciaVisivel } from "../lib/sequencia";
+import { levelFor } from "../lib/levels";
 
 const router: IRouter = Router();
 
@@ -33,7 +34,7 @@ function toJogador(u: User, novo: boolean, codigoRecuperacao: string | null = nu
     apelido: u.nickname,
     avatar: u.avatar,
     pontosTotais: u.totalPoints,
-    nivel: u.level,
+    nivel: levelFor(u.totalPoints),
     sequenciaDias: sequenciaVisivel(u.streak, u.lastPlayedAt),
     novo,
     codigoRecuperacao,
