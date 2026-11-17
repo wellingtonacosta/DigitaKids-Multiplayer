@@ -13,7 +13,8 @@ const TECLAS_REPOUSO = ["KeyA", "KeyS", "KeyD", "KeyF", "KeyJ", "KeyK", "KeyL", 
 /** Introdução da lição 1: onde ficam as mãos no teclado. */
 export function PosicaoMaos({ onComecar }: { onComecar: () => void }) {
   return (
-    <div className="space-y-4 min-w-0" data-testid="intro-posicao-maos">
+    <div className="space-y-4 min-w-0 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-x-8 lg:gap-y-4 lg:items-start" data-testid="intro-posicao-maos">
+      <div className="space-y-4 min-w-0">
       <div>
         <p className="font-bold text-secondary">Lição 1 · antes de começar</p>
         <h1 className="font-display text-2xl sm:text-4xl font-extrabold">Onde ficam as mãos</h1>
@@ -50,13 +51,16 @@ export function PosicaoMaos({ onComecar }: { onComecar: () => void }) {
         </DialogContent>
       </Dialog>
 
-      <Maos dedos={REPOUSO} legenda="Indicadores em F e J" />
-      <TecladoVirtual alvos={TECLAS_REPOUSO} rotuloAria="Teclado com as mãos na posição inicial: A S D F e J K L Ç" />
+      </div>
 
-      <button onClick={onComecar} data-testid="button-comecar-treino"
-        className="chunky-btn inline-flex items-center gap-2 rounded-xl bg-primary text-primary-foreground px-6 py-3 font-bold text-lg">
-        Começar o treino<ArrowRight className="h-5 w-5" aria-hidden="true" />
-      </button>
+      <div className="space-y-4 min-w-0">
+        <Maos dedos={REPOUSO} legenda="Indicadores em F e J" />
+        <TecladoVirtual alvos={TECLAS_REPOUSO} rotuloAria="Teclado com as mãos na posição inicial: A S D F e J K L Ç" />
+        <button onClick={onComecar} data-testid="button-comecar-treino"
+          className="chunky-btn inline-flex items-center gap-2 rounded-xl bg-primary text-primary-foreground px-6 py-3 font-bold text-lg">
+          Começar o treino<ArrowRight className="h-5 w-5" aria-hidden="true" />
+        </button>
+      </div>
     </div>
   );
 }

@@ -68,7 +68,7 @@ export function Layout({ jogador, children }: { jogador: Jogador; children: Reac
         </div>
       </header>
 
-      <main className="px-4 pt-6 pb-28 md:px-10 md:py-10 max-w-5xl w-full min-w-0">{children}</main>
+      <main className="px-4 pt-6 pb-28 md:px-10 md:py-6 max-w-5xl lg:max-w-[1500px] w-full min-w-0">{children}</main>
 
       <nav aria-label="Navegação principal" className="md:hidden fixed bottom-0 inset-x-0 z-30 grid grid-cols-5 bg-sidebar border-t-4 border-accent pb-[env(safe-area-inset-bottom)]">
         {NAV.map((n) => {

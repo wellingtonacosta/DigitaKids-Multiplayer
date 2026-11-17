@@ -233,7 +233,7 @@ function Sessao({ licao, proximaId, voltar }: { licao: Licao; proximaId?: number
         <div className="h-3 rounded-full bg-muted border-2 border-foreground overflow-hidden mb-4" role="progressbar" aria-valuenow={progresso} aria-valuemin={0} aria-valuemax={100} aria-label="Progresso">
           <div className="h-full bg-accent origin-left transition-transform duration-200" style={{ transform: `scaleX(${progresso / 100})` }} />
         </div>
-        <p className="font-mono text-[clamp(1.5rem,5vw,2.6rem)] leading-[1.6] tracking-wide break-words select-none" data-testid="text-alvo" aria-label={licao.textoAlvo}>
+        <p className="font-mono text-[clamp(1.5rem,5vw,2.6rem)] lg:text-[clamp(1.5rem,1.7vw,2.1rem)] leading-[1.6] tracking-wide break-words select-none" data-testid="text-alvo" aria-label={licao.textoAlvo}>
           {chars.map((c, i) => (
             <span key={i} aria-hidden="true" className={cn("rounded-md px-[1px]",
               i < idx && "text-secondary",
@@ -243,7 +243,7 @@ function Sessao({ licao, proximaId, voltar }: { licao: Licao; proximaId?: number
             </span>
           ))}
         </p>
-        <div className="min-h-[3rem] mt-3">
+        <div className="min-h-[2.5rem] mt-2">
           {erroMsg ? (
             <p className="inline-flex items-center gap-2 rounded-xl bg-[#FCE1DC] border-2 border-primary px-3 py-2 font-bold rise" data-testid="text-erro">
               <X className="h-5 w-5 shrink-0 rounded-full bg-primary text-primary-foreground p-0.5" aria-hidden="true" />{erroMsg}
@@ -256,8 +256,10 @@ function Sessao({ licao, proximaId, voltar }: { licao: Licao; proximaId?: number
         </div>
       </section>
 
-      <Maos dedos={dedos} />
-      <TecladoVirtual alvos={alvos} flash={flash} semOlhar={semOlhar} rotuloAria={toque ? "Próxima tecla: " + nomeTecla(toque.code) + (toque.shift ? " com " + nomeTecla(codeDoShift(toque.code)) : "") : "Teclado virtual"} />
+      <div className="space-y-4 lg:space-y-0 lg:grid lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)] lg:items-center lg:gap-6">
+        <Maos dedos={dedos} />
+        <TecladoVirtual alvos={alvos} flash={flash} semOlhar={semOlhar} rotuloAria={toque ? "Próxima tecla: " + nomeTecla(toque.code) + (toque.shift ? " com " + nomeTecla(codeDoShift(toque.code)) : "") : "Teclado virtual"} />
+      </div>
     </div>
   );
 }
