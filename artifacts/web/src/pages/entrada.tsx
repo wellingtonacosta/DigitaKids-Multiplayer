@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEntrar, getObterJogadorAtualQueryKey } from "@workspace/api-client-react";
+import { useEntrar, getObterJogadorAtualQueryKey, type Jogador } from "@workspace/api-client-react";
 import { ShieldCheck, ArrowRight, Check } from "lucide-react";
 import { Avatar, AVATARES } from "@/components/avatar-jogador";
 import { Logo } from "@/components/layout";
@@ -23,6 +23,9 @@ export default function Entrada() {
   const [avatar, setAvatar] = useState("avatar-1");
   const [tocado, setTocado] = useState(false);
   const [msgServidor, setMsgServidor] = useState<string | null>(null);
+  const [codigo, setCodigo] = useState("");
+  const [pedeCodigo, setPedeCodigo] = useState(false);
+  const [novoJogador, setNovoJogador] = useState<Jogador | null>(null);
   const erroLocal = validar(apelido);
   const msg = msgServidor ?? (tocado ? erroLocal : null);
 
@@ -31,15 +34,42 @@ export default function Entrada() {
     setTocado(true);
     setMsgServidor(null);
     if (erroLocal) return;
-    entrar.mutate({ data: { apelido, avatar } }, {
-      onSuccess: (j) => qc.setQueryData(getObterJogadorAtualQueryKey(), j),
+    const cod = codigo.trim();
+    entrar.mutate({ data: { apelido, avatar, ...(cod ? { codigo: cod } : {}) } }, {
+      onSuccess: (j) => {
+        if (j.codigoRecuperacao) setNovoJogador(j);
+        else qc.setQueryData(getObterJogadorAtualQueryKey(), j);
+      },
       onError: (err) => {
         const e2 = err as { status?: number; data?: { erro?: string } | null };
-        if (e2.status === 409) setMsgServidor("Esse apelido já está em uso, escolha outro");
+        if (e2.status === 409) {
+          setPedeCodigo(true);
+          setMsgServidor("Esse apelido já está em uso. Se ele é seu, digite abaixo o código de recuperação. Se não, escolha outro apelido.");
+        }
         else if (e2.data?.erro) setMsgServidor(e2.data.erro);
         else setMsgServidor("Não conseguimos conectar agora. Tente de novo em alguns segundos.");
       },
     });
+  }
+
+  if (novoJogador) {
+    return (
+      <div className="min-h-[100dvh] dots-bg flex flex-col">
+        <div className="bg-sidebar px-5 py-4 border-b-[3px] border-foreground"><Logo claro /></div>
+        <div className="flex-1 grid place-items-center px-4 py-8">
+          <div className="chunky rounded-3xl bg-card p-5 sm:p-8 max-w-md w-full min-w-0 text-center rise" data-testid="tela-codigo">
+            <h1 className="font-display text-3xl font-extrabold">Anote seu código secreto</h1>
+            <p className="mt-3 text-lg text-muted-foreground">Se você entrar de outro computador ou perder seu acesso, esse código traz sua conta de volta. Ele aparece só desta vez.</p>
+            <p className="mt-5 rounded-2xl bg-accent border-[3px] border-foreground py-4 text-4xl font-mono font-extrabold tracking-widest break-all" data-testid="text-codigo">{novoJogador.codigoRecuperacao}</p>
+            <button type="button" data-testid="button-codigo-ok"
+              onClick={() => qc.setQueryData(getObterJogadorAtualQueryKey(), novoJogador)}
+              className="chunky-btn mt-6 w-full rounded-2xl bg-primary text-primary-foreground py-4 text-xl font-display font-extrabold">
+              Já anotei, continuar
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -75,6 +105,16 @@ export default function Entrada() {
           <div id="apelido-msg" role="status" aria-live="polite" data-testid="status-entrar" className="min-h-[1.75rem]">
             {msg && <p className="flex items-start gap-2 rounded-lg bg-accent/40 border-2 border-foreground px-3 py-2 font-bold text-base rise"><span aria-hidden="true" className="font-display">!</span>{msg}</p>}
           </div>
+
+          {pedeCodigo && (
+            <div className="mt-2 min-w-0">
+              <label htmlFor="codigo" className="font-display text-lg font-extrabold">Código de recuperação</label>
+              <input id="codigo" value={codigo} maxLength={12} autoComplete="off" autoCapitalize="characters"
+                onChange={(e) => { setCodigo(e.target.value); setMsgServidor(null); }}
+                data-testid="input-codigo" placeholder="XXXX-XXXX"
+                className="mt-1 w-full min-w-0 rounded-xl border-[3px] border-foreground bg-background px-4 py-3 text-xl font-bold font-mono uppercase outline-none focus:ring-4 focus:ring-ring/40" />
+            </div>
+          )}
 
           <fieldset className="mt-4 min-w-0">
             <legend className="font-display text-xl font-extrabold mb-3">Escolha seu avatar</legend>

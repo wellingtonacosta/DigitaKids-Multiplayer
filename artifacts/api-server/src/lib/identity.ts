@@ -1,4 +1,4 @@
-import { createHash, createHmac, timingSafeEqual } from "node:crypto";
+import { createHash, createHmac, randomInt, timingSafeEqual } from "node:crypto";
 import type { Request } from "express";
 
 function secret(): string {
@@ -50,4 +50,27 @@ export function readSessionToken(token: string | undefined): number | null {
   if (Number(exp) < Date.now()) return null;
   const userId = Number(id);
   return Number.isInteger(userId) ? userId : null;
+}
+
+const ALFABETO_CODIGO = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+
+/** Código de recuperação no formato XXXX-XXXX, sem letras que se confundem (0/O, 1/I/L). */
+export function gerarCodigoRecuperacao(): string {
+  let c = "";
+  for (let i = 0; i < 8; i++) c += ALFABETO_CODIGO[randomInt(ALFABETO_CODIGO.length)];
+  return `${c.slice(0, 4)}-${c.slice(4)}`;
+}
+
+function normalizarCodigo(codigo: string): string {
+  return codigo.toUpperCase().replace(/[^A-Z0-9]/g, "");
+}
+
+export function hashCodigo(codigo: string): string {
+  return createHmac("sha256", secret()).update(`recuperacao:${normalizarCodigo(codigo)}`).digest("hex");
+}
+
+export function codigoConfere(codigo: string, hashGuardado: string): boolean {
+  const a = Buffer.from(hashCodigo(codigo));
+  const b = Buffer.from(hashGuardado);
+  return a.length === b.length && timingSafeEqual(a, b);
 }

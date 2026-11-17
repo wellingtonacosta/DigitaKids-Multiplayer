@@ -7,6 +7,7 @@ export const usersTable = pgTable(
     nickname: text("nickname").notNull(),
     ipHash: text("ip_hash").notNull(),
     avatar: text("avatar").notNull(),
+    recoveryHash: text("recovery_hash"),
     totalPoints: integer("total_points").notNull().default(0),
     level: text("level").notNull().default("Pintinho"),
     streak: integer("streak").notNull().default(0),

@@ -16,4 +16,9 @@ export interface Jogador {
   sequenciaDias: number;
   /** Verdadeiro quando o cadastro acabou de ser criado */
   novo: boolean;
+  /**
+     * Código para recuperar a conta. Só vem quando acabou de ser gerado; fica nulo nas outras respostas.
+     * @nullable
+     */
+  codigoRecuperacao?: string | null;
 }

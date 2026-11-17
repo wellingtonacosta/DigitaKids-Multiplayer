@@ -137,6 +137,8 @@ export interface EntrarInput {
   apelido: string;
   /** Chave do avatar (avatar-1 até avatar-12) */
   avatar: string;
+  /** Código de recuperação, usado só ao entrar de outra conexão com um apelido que já existe */
+  codigo?: string;
 }
 
 export interface Jogador {
@@ -149,6 +151,11 @@ export interface Jogador {
   sequenciaDias: number;
   /** Verdadeiro quando o cadastro acabou de ser criado */
   novo: boolean;
+  /**
+     * Código para recuperar a conta. Só vem quando acabou de ser gerado; fica nulo nas outras respostas.
+     * @nullable
+     */
+  codigoRecuperacao?: string | null;
 }
 
 export type ObterRankingParams = {

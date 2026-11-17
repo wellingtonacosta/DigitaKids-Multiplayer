@@ -42,6 +42,7 @@ _Populate as you build — explicit user instructions worth remembering across s
 - As 15 lições são gravadas no banco na inicialização da API (`seed-licoes.ts`), a partir de `lib/typing-core/src/licoes.ts`.
 - Corridas: Socket.IO no servidor da API (`/api/socket.io`), salas em memória (`lib/corridas`), contrato compartilhado em `lib/typing-core/src/corrida.ts`. Os 60 textos são gravados na primeira execução.
 - Sequência de dias e medalhas: contadas por dia civil em America/Sao_Paulo (`lib/sequencia.ts`); medalhas são conferidas no banco após cada lição e corrida (`lib/medalhas.ts`, catálogo gravado na inicialização). Mudou o catálogo? O perfil já mostra a lista nova.
+- Recuperação de conta: o apelido é preso ao hash do IP. Conta nova recebe um código XXXX-XXXX (mostrado uma vez, guardado só como HMAC em `users.recovery_hash`). De outro IP, `/auth/entrar` exige `codigo` (409 sem, 403 errado, 429 após 5 erros). Contas antigas ganham código na primeira entrada pelo mesmo IP.
 - Depois de mudar o OpenAPI: `pnpm --filter @workspace/api-spec run codegen`.
 
 ## Pointers

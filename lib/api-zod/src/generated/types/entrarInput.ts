@@ -11,4 +11,6 @@ export interface EntrarInput {
   apelido: string;
   /** Chave do avatar (avatar-1 até avatar-12) */
   avatar: string;
+  /** Código de recuperação, usado só ao entrar de outra conexão com um apelido que já existe */
+  codigo?: string;
 }

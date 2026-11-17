@@ -53,6 +53,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Erro"
+        "403":
+          description: Código de recuperação não confere
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
         "409":
           description: Apelido já está em uso por outro jogador
           content:
@@ -478,6 +484,9 @@ components:
         avatar:
           type: string
           description: Chave do avatar (avatar-1 até avatar-12)
+        codigo:
+          type: string
+          description: Código de recuperação, usado só ao entrar de outra conexão com um apelido que já existe
       required:
         - apelido
         - avatar
@@ -500,6 +509,10 @@ components:
         novo:
           type: boolean
           description: Verdadeiro quando o cadastro acabou de ser criado
+        codigoRecuperacao:
+          type: string
+          nullable: true
+          description: Código para recuperar a conta. Só vem quando acabou de ser gerado; fica nulo nas outras respostas.
       required:
         - id
         - apelido

@@ -6,7 +6,10 @@ import {
   SESSION_COOKIE,
   SESSION_MAX_AGE_MS,
   clientIp,
+  codigoConfere,
   createSessionToken,
+  gerarCodigoRecuperacao,
+  hashCodigo,
   hashIp,
   readSessionToken,
 } from "../lib/identity";
@@ -24,7 +27,7 @@ const cookieOpts = {
   path: "/",
 };
 
-function toJogador(u: User, novo: boolean) {
+function toJogador(u: User, novo: boolean, codigoRecuperacao: string | null = null) {
   return {
     id: u.id,
     apelido: u.nickname,
@@ -33,7 +36,25 @@ function toJogador(u: User, novo: boolean) {
     nivel: u.level,
     sequenciaDias: sequenciaVisivel(u.streak, u.lastPlayedAt),
     novo,
+    codigoRecuperacao,
   };
+}
+
+// Tentativas erradas de código por apelido: impede adivinhar o código.
+const errosCodigo = new Map<string, { n: number; reset: number }>();
+const MAX_ERROS_CODIGO = 5;
+const JANELA_CODIGO_MS = 15 * 60 * 1000;
+
+function bloqueadoPorCodigo(nick: string): boolean {
+  const e = errosCodigo.get(nick);
+  return !!e && e.reset > Date.now() && e.n >= MAX_ERROS_CODIGO;
+}
+
+function registrarErroCodigo(nick: string): void {
+  const agora = Date.now();
+  const e = errosCodigo.get(nick);
+  if (!e || e.reset < agora) errosCodigo.set(nick, { n: 1, reset: agora + JANELA_CODIGO_MS });
+  else e.n += 1;
 }
 
 function cookieValue(header: string | undefined, name: string): string | undefined {
@@ -76,21 +97,39 @@ router.post("/auth/entrar", rateLimit(20, 10 * 60 * 1000), async (req, res): Pro
 
   let user: User;
   let novo = false;
+  let codigoNovo: string | null = null;
   if (existing) {
-    if (existing.ipHash !== ipHash) {
-      res.status(409).json({ erro: "Esse apelido já está em uso, escolha outro" });
-      return;
+    const ipHashNovo = existing.ipHash;
+    if (ipHashNovo !== ipHash) {
+      const codigo = parsed.data.codigo?.trim();
+      if (!codigo || !existing.recoveryHash) {
+        res.status(409).json({ erro: "Esse apelido já está em uso, escolha outro" });
+        return;
+      }
+      if (bloqueadoPorCodigo(nick)) {
+        res.status(429).json({ erro: "Muitas tentativas com esse apelido. Tente de novo mais tarde." });
+        return;
+      }
+      if (!codigoConfere(codigo, existing.recoveryHash)) {
+        registrarErroCodigo(nick);
+        res.status(403).json({ erro: "O código não confere. Confira o que você anotou e tente de novo." });
+        return;
+      }
+      errosCodigo.delete(nick);
     }
+    // Contas antigas ainda não têm código: gera um na primeira entrada pela conexão de sempre.
+    if (!existing.recoveryHash) codigoNovo = gerarCodigoRecuperacao();
     const [updated] = await db
       .update(usersTable)
-      .set({ avatar })
+      .set({ avatar, ipHash, ...(codigoNovo ? { recoveryHash: hashCodigo(codigoNovo) } : {}) })
       .where(and(eq(usersTable.id, existing.id)))
       .returning();
     user = updated!;
   } else {
+    codigoNovo = gerarCodigoRecuperacao();
     const inserted = await db
       .insert(usersTable)
-      .values({ nickname: nick, ipHash, avatar })
+      .values({ nickname: nick, ipHash, avatar, recoveryHash: hashCodigo(codigoNovo) })
       .onConflictDoNothing()
       .returning();
     if (!inserted[0]) {
@@ -102,7 +141,7 @@ router.post("/auth/entrar", rateLimit(20, 10 * 60 * 1000), async (req, res): Pro
   }
 
   res.cookie(SESSION_COOKIE, createSessionToken(user.id), cookieOpts);
-  res.json(EntrarResponse.parse(toJogador(user, novo)));
+  res.json(EntrarResponse.parse(toJogador(user, novo, codigoNovo)));
 });
 
 router.get("/auth/eu", async (req, res): Promise<void> => {

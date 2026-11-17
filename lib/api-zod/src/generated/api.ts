@@ -23,7 +23,8 @@ export const HealthCheckResponse = zod.object({
  */
 export const EntrarBody = zod.object({
   "apelido": zod.string().describe('3 a 16 caracteres, letras e números, sem espaços'),
-  "avatar": zod.string().describe('Chave do avatar (avatar-1 até avatar-12)')
+  "avatar": zod.string().describe('Chave do avatar (avatar-1 até avatar-12)'),
+  "codigo": zod.string().optional().describe('Código de recuperação, usado só ao entrar de outra conexão com um apelido que já existe')
 })
 
 export const EntrarResponse = zod.object({
@@ -33,7 +34,8 @@ export const EntrarResponse = zod.object({
   "pontosTotais": zod.number().int(),
   "nivel": zod.string().describe('Pintinho, Galinha, Galo ou Mestre do Milharal'),
   "sequenciaDias": zod.number().int(),
-  "novo": zod.boolean().describe('Verdadeiro quando o cadastro acabou de ser criado')
+  "novo": zod.boolean().describe('Verdadeiro quando o cadastro acabou de ser criado'),
+  "codigoRecuperacao": zod.string().nullish().describe('Código para recuperar a conta. Só vem quando acabou de ser gerado; fica nulo nas outras respostas.')
 })
 
 
@@ -47,7 +49,8 @@ export const ObterJogadorAtualResponse = zod.object({
   "pontosTotais": zod.number().int(),
   "nivel": zod.string().describe('Pintinho, Galinha, Galo ou Mestre do Milharal'),
   "sequenciaDias": zod.number().int(),
-  "novo": zod.boolean().describe('Verdadeiro quando o cadastro acabou de ser criado')
+  "novo": zod.boolean().describe('Verdadeiro quando o cadastro acabou de ser criado'),
+  "codigoRecuperacao": zod.string().nullish().describe('Código para recuperar a conta. Só vem quando acabou de ser gerado; fica nulo nas outras respostas.')
 })
 
 
