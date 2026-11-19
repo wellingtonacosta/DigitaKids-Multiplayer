@@ -60,9 +60,11 @@ export const EVENTOS = {
   estado: "sala:estado",
 } as const;
 
+const CODIGO_SALA_REGEX = new RegExp(`^[${ALFABETO_SALA}]{5}$`);
+
 /** Código da sala: 5 letras maiúsculas ou números, sem O, 0, I, 1 nem L. */
 export function codigoValido(c: string): boolean {
-  return new RegExp(`^[${ALFABETO_SALA}]{5}$`).test(c);
+  return CODIGO_SALA_REGEX.test(c);
 }
 
 /** Quantos caracteres, no máximo, dá para ter digitado depois de um tempo (limite humano). */

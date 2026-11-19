@@ -85,55 +85,80 @@ export class MotorDigitacao {
   }
 
   processar(ev: EventoTecla): Resultado {
-    if (ev.isTrusted === false) return { tipo: "ignorado" };
-    if (ev.repeat) return { tipo: "ignorado" };
+    if (this.eventoDeveSerIgnorado(ev)) return { tipo: "ignorado" };
     if (this.terminou) return { tipo: "ignorado" };
-    if (TECLAS_MODIFICADORAS.has(ev.code)) return { tipo: "ignorado" };
-    if (ev.ctrlKey || ev.metaKey || ev.altKey) return { tipo: "ignorado" };
-    if (ev.code === "Backspace" || ev.code === "Tab" || ev.code === "Enter" || ev.code.startsWith("Arrow") || ev.code === "Escape")
-      return { tipo: "ignorado" };
 
     const esperado = this.toques[this.pos]!;
     if (this.inicioMs === null) this.inicioMs = this.agora();
 
-    let quantidade = 0;
-    if (this.modo === "caractere") {
-      const alvo = [...this.texto][this.indiceCaractere]!;
-      if (ev.key.normalize("NFC") === alvo) {
-        // Caps Lock e layouts diferentes podem produzir a mesma letra.
-        const fim = this.inicios[this.indiceCaractere + 1] ?? this.toques.length;
-        quantidade = fim - this.pos;
-      } else if (esperado.morta) {
-        // Mantém a sequência física dos acentos no ABNT2.
-        if (ev.code === esperado.code && ev.shiftKey === esperado.shift
-          && (ev.key === "Dead" || ["´", "`", "~", "^"].includes(ev.key))) quantidade = 1;
-      } else if (this.progressoNoCaractere > 0 && ev.code === esperado.code
-        && ev.key === alvo.normalize("NFD")[0]) {
-        // Com preventDefault, alguns navegadores entregam a letra-base após o acento.
-        quantidade = 1;
-      }
-    } else if (ev.code === esperado.code && ev.shiftKey === esperado.shift) {
-      quantidade = 1;
-    }
+    const quantidade = this.quantidadeAcertos(ev, esperado);
 
     if (quantidade > 0) {
-      for (let i = 0; i < quantidade; i++) {
-        const mao = contarMao(this.toques[this.pos]!.code);
-        if (mao === "esquerda") this.esq++;
-        else if (mao === "direita") this.dir++;
-        this.pos++;
-        this.certos++;
-      }
+      this.registrarAcertos(quantidade);
       if (this.terminou) this.fimMs = this.agora();
       return { tipo: "acerto", terminou: this.terminou };
     }
 
-    // Errou. Se estava no meio de um acento, volta ao início do caractere.
+    this.registrarErro(esperado);
+    return { tipo: "erro", esperado, recebido: ev.code };
+  }
+
+  private eventoDeveSerIgnorado(ev: EventoTecla): boolean {
+    return ev.isTrusted === false ||
+      Boolean(ev.repeat) ||
+      TECLAS_MODIFICADORAS.has(ev.code) ||
+      Boolean(ev.ctrlKey || ev.metaKey || ev.altKey) ||
+      ev.code === "Backspace" ||
+      ev.code === "Tab" ||
+      ev.code === "Enter" ||
+      ev.code.startsWith("Arrow") ||
+      ev.code === "Escape";
+  }
+
+  private quantidadeAcertos(ev: EventoTecla, esperado: Toque): number {
+    if (this.modo === "caractere") return this.quantidadeAcertosPorCaractere(ev, esperado);
+    return ev.code === esperado.code && ev.shiftKey === esperado.shift ? 1 : 0;
+  }
+
+  private quantidadeAcertosPorCaractere(ev: EventoTecla, esperado: Toque): number {
+    const indice = this.indiceCaractere;
+    const alvo = [...this.texto][indice]!;
+
+    if (ev.key.normalize("NFC") === alvo) {
+      const fim = this.inicios[indice + 1] ?? this.toques.length;
+      return fim - this.pos;
+    }
+
+    if (esperado.morta) {
+      const teclaMortaValida =
+        ev.code === esperado.code &&
+        ev.shiftKey === esperado.shift &&
+        (ev.key === "Dead" || ["´", "`", "~", "^"].includes(ev.key));
+      return teclaMortaValida ? 1 : 0;
+    }
+
+    const letraBaseAposAcento =
+      this.progressoNoCaractere > 0 &&
+      ev.code === esperado.code &&
+      ev.key === alvo.normalize("NFD")[0];
+    return letraBaseAposAcento ? 1 : 0;
+  }
+
+  private registrarAcertos(quantidade: number): void {
+    for (let i = 0; i < quantidade; i++) {
+      const mao = contarMao(this.toques[this.pos]!.code);
+      if (mao === "esquerda") this.esq++;
+      else if (mao === "direita") this.dir++;
+      this.pos++;
+      this.certos++;
+    }
+  }
+
+  private registrarErro(esperado: Toque): void {
     this.erros++;
     this.errosPorTecla[esperado.code] = (this.errosPorTecla[esperado.code] ?? 0) + 1;
     const inicioChar = this.inicios[this.indiceCaractere];
     if (inicioChar !== undefined && this.pos > inicioChar) this.pos = inicioChar;
-    return { tipo: "erro", esperado, recebido: ev.code };
   }
 
   resumo(): ResumoDigitacao {
