@@ -19,7 +19,15 @@ import Corridas from "@/pages/corridas";
 import SalaPagina from "@/pages/sala";
 
 const queryClient = new QueryClient();
-const ROTAS = ["/", "/aulas", "/corridas", "/ranking", "/perfil"];
+const ROTAS_FIXAS = new Set(["/", "/aulas", "/corridas", "/ranking", "/perfil"]);
+const PADRAO_ROTA_LICAO = /^\/aulas\/\d+$/;
+const PADRAO_ROTA_SALA = /^\/sala\/[A-Za-z0-9]{5}$/;
+
+function rotaExiste(caminho: string) {
+  return ROTAS_FIXAS.has(caminho)
+    || PADRAO_ROTA_LICAO.test(caminho)
+    || PADRAO_ROTA_SALA.test(caminho);
+}
 
 function Carregando() {
   return (
@@ -49,7 +57,7 @@ function ErroConexao({ onRetry }: { onRetry: () => void }) {
 function Router() {
   const [loc] = useLocation();
   const { jogador, carregando, erro, refetch } = useSessao();
-  if (!ROTAS.includes(loc) && !/^\/aulas\/\d+$/.test(loc) && !/^\/sala\/[A-Za-z0-9]{5}$/.test(loc)) return <NotFound />;
+  if (!rotaExiste(loc)) return <NotFound />;
   if (carregando) return <Carregando />;
   if (erro) return <ErroConexao onRetry={() => refetch()} />;
   if (!jogador) return <Entrada />;

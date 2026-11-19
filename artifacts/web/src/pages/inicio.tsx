@@ -5,18 +5,22 @@ import { Avatar } from "@/components/avatar-jogador";
 import { cn } from "@/lib/utils";
 import { Galo } from "@/components/milharal";
 
-const NIVEIS = ["Aprendiz", "Digitador", "Ninja do Teclado", "Mestre das Teclas"];
-const LIMIARES = [0, 200, 800, 2000];
+const NOMES_NIVEIS = ["Aprendiz", "Digitador", "Ninja do Teclado", "Mestre das Teclas"];
+const LIMIARES_PONTOS_POR_NIVEL = [0, 200, 800, 2000];
 const ATALHOS = [
-  { href: "/aulas", t: "Aulas", d: "Cada dedo ganha sua casinha no teclado.", i: BookOpen, c: "bg-primary text-primary-foreground", r: "-rotate-1" },
-  { href: "/corridas", t: "Corridas", d: "Digite rápido e vença o relógio.", i: Flag, c: "bg-secondary text-secondary-foreground", r: "rotate-1" },
-  { href: "/ranking", t: "Ranking", d: "Veja quem está no topo da turma.", i: Trophy, c: "bg-accent text-accent-foreground", r: "rotate-1" },
-  { href: "/perfil", t: "Perfil", d: "Suas conquistas e seu avatar.", i: UserRound, c: "bg-card text-foreground", r: "-rotate-1" },
+  { href: "/aulas", titulo: "Aulas", descricao: "Cada dedo ganha sua casinha no teclado.", icone: BookOpen, cor: "bg-primary text-primary-foreground", inclinacao: "-rotate-1" },
+  { href: "/corridas", titulo: "Corridas", descricao: "Digite rápido e vença o relógio.", icone: Flag, cor: "bg-secondary text-secondary-foreground", inclinacao: "rotate-1" },
+  { href: "/ranking", titulo: "Ranking", descricao: "Veja quem está no topo da turma.", icone: Trophy, cor: "bg-accent text-accent-foreground", inclinacao: "rotate-1" },
+  { href: "/perfil", titulo: "Perfil", descricao: "Suas conquistas e seu avatar.", icone: UserRound, cor: "bg-card text-foreground", inclinacao: "-rotate-1" },
 ];
 
 export default function Inicio({ jogador }: { jogador: Jogador }) {
-  const idx = Math.max(0, NIVEIS.indexOf(jogador.nivel));
-  const prox = LIMIARES[idx + 1];
+  const indiceNivel = Math.max(0, NOMES_NIVEIS.indexOf(jogador.nivel));
+  const limiteProximoNivel = LIMIARES_PONTOS_POR_NIVEL[indiceNivel + 1];
+  const mensagemProximoNivel = limiteProximoNivel !== undefined
+    ? `Faltam ${Math.max(0, limiteProximoNivel - jogador.pontosTotais).toLocaleString("pt-BR")} pontos para virar ${NOMES_NIVEIS[indiceNivel + 1]}`
+    : "Você chegou ao nível máximo!";
+
   return (
     <div className="space-y-8">
       <section className="chunky rounded-3xl bg-sidebar text-sidebar-foreground p-5 sm:p-8 flex flex-col sm:flex-row gap-5 sm:items-center rise relative overflow-hidden">
@@ -33,10 +37,10 @@ export default function Inicio({ jogador }: { jogador: Jogador }) {
         <div className="chunky rounded-2xl bg-card p-5 rise" style={{animationDelay:".08s"}}>
           <p className="text-muted-foreground font-bold">Nível</p>
           <p className="font-display text-3xl font-extrabold" data-testid="text-nivel">{jogador.nivel}</p>
-          <ol className="mt-3 flex gap-1.5" aria-label={"Nível " + (idx + 1) + " de 4"}>
-            {NIVEIS.map((n, i) => <li key={n} title={n} className={cn("h-3 flex-1 rounded-full border-2 border-foreground", i <= idx ? "bg-primary" : "bg-muted")} />)}
+          <ol className="mt-3 flex gap-1.5" aria-label={"Nível " + (indiceNivel + 1) + " de " + NOMES_NIVEIS.length}>
+            {NOMES_NIVEIS.map((nome, indice) => <li key={nome} title={nome} className={cn("h-3 flex-1 rounded-full border-2 border-foreground", indice <= indiceNivel ? "bg-primary" : "bg-muted")} />)}
           </ol>
-          <p className="mt-2 text-sm text-muted-foreground font-semibold">{prox !== undefined ? `Faltam ${Math.max(0, prox - jogador.pontosTotais).toLocaleString("pt-BR")} pontos para virar ${NIVEIS[idx + 1]}` : "Você chegou ao nível máximo!"}</p>
+          <p className="mt-2 text-sm text-muted-foreground font-semibold">{mensagemProximoNivel}</p>
         </div>
         <div className="chunky rounded-2xl bg-accent p-5 rise" style={{animationDelay:".16s"}}>
           <p className="font-bold flex items-center gap-2"><Star className="h-5 w-5" aria-hidden="true" />Pontos</p>
@@ -52,14 +56,14 @@ export default function Inicio({ jogador }: { jogador: Jogador }) {
       <section aria-labelledby="titulo-atalhos">
         <h2 id="titulo-atalhos" className="font-display text-2xl font-extrabold mb-4">Para onde vamos?</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {ATALHOS.map((a, i) => (
-            <Link key={a.href} href={a.href} data-testid={"card-atalho-" + a.t.toLowerCase()}
-              className={cn("chunky-btn group rounded-2xl p-5 flex items-center gap-4 rise", a.c, a.r, "hover:rotate-0")}
-              style={{ animationDelay: 0.3 + i * 0.08 + "s" }}>
-              <span className="rounded-xl bg-background/90 text-foreground border-[3px] border-foreground p-3"><a.i className="h-7 w-7" aria-hidden="true" /></span>
+          {ATALHOS.map((atalho, indice) => (
+            <Link key={atalho.href} href={atalho.href} data-testid={"card-atalho-" + atalho.titulo.toLowerCase()}
+              className={cn("chunky-btn group rounded-2xl p-5 flex items-center gap-4 rise", atalho.cor, atalho.inclinacao, "hover:rotate-0")}
+              style={{ animationDelay: 0.3 + indice * 0.08 + "s" }}>
+              <span className="rounded-xl bg-background/90 text-foreground border-[3px] border-foreground p-3"><atalho.icone className="h-7 w-7" aria-hidden="true" /></span>
               <span className="flex-1">
-                <span className="block font-display text-2xl font-extrabold">{a.t}</span>
-                <span className="block font-semibold opacity-90">{a.d}</span>
+                <span className="block font-display text-2xl font-extrabold">{atalho.titulo}</span>
+                <span className="block font-semibold opacity-90">{atalho.descricao}</span>
               </span>
               <ArrowRight className="h-6 w-6 transition-transform group-hover:translate-x-1" aria-hidden="true" />
             </Link>

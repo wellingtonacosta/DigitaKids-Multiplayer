@@ -1,4 +1,5 @@
 import { Link } from "wouter";
+import { useMemo } from "react";
 import { Lock, Star, Keyboard, RefreshCw, ArrowRight, Gauge, Target } from "lucide-react";
 import { useListarLicoes } from "@workspace/api-client-react";
 import { useTecladoFisico } from "@/hooks/use-sessao";
@@ -28,6 +29,10 @@ export default function Aulas() {
   const temTeclado = useTecladoFisico();
   const q = useListarLicoes();
   const licoes = q.data ?? [];
+  const licoesEmOrdem = useMemo(
+    () => [...licoes].sort((primeira, segunda) => primeira.ordem - segunda.ordem),
+    [licoes],
+  );
   const feitas = licoes.filter((l) => l.estrelas > 0).length;
   const atual = licoes.find((l) => l.desbloqueada && l.estrelas === 0);
 
@@ -66,7 +71,7 @@ export default function Aulas() {
       )}
 
       <ol className="relative space-y-4 before:absolute before:left-[27px] before:top-4 before:bottom-4 before:border-l-[4px] before:border-dashed before:border-foreground/30">
-        {[...licoes].sort((a, b) => a.ordem - b.ordem).map((l, i) => {
+        {licoesEmOrdem.map((l, i) => {
           const eAtual = atual?.id === l.id;
           const conteudo = (
             <>

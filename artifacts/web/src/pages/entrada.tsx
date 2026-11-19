@@ -7,12 +7,15 @@ import { Logo } from "@/components/layout";
 import { cn } from "@/lib/utils";
 import { Pintinho, Espiga } from "@/components/milharal";
 
-function validar(a: string): string | null {
-  if (a.length === 0) return "Escreva um apelido para começar.";
-  if (/\s/.test(a)) return "O apelido não pode ter espaços.";
-  if (!/^[A-Za-z0-9]+$/.test(a)) return "Use só letras e números, sem acentos ou símbolos.";
-  if (a.length < 3) return "Falta pouco! O apelido precisa de pelo menos 3 letras ou números.";
-  if (a.length > 16) return "O apelido pode ter no máximo 16 letras ou números.";
+const TAMANHO_MINIMO_APELIDO = 3;
+const TAMANHO_MAXIMO_APELIDO = 16;
+
+function validarApelido(apelido: string): string | null {
+  if (apelido.length === 0) return "Escreva um apelido para começar.";
+  if (/\s/.test(apelido)) return "O apelido não pode ter espaços.";
+  if (!/^[A-Za-z0-9]+$/.test(apelido)) return "Use só letras e números, sem acentos ou símbolos.";
+  if (apelido.length < TAMANHO_MINIMO_APELIDO) return "Falta pouco! O apelido precisa de pelo menos 3 letras ou números.";
+  if (apelido.length > TAMANHO_MAXIMO_APELIDO) return "O apelido pode ter no máximo 16 letras ou números.";
   return null;
 }
 
@@ -26,7 +29,7 @@ export default function Entrada() {
   const [codigo, setCodigo] = useState("");
   const [pedeCodigo, setPedeCodigo] = useState(false);
   const [novoJogador, setNovoJogador] = useState<Jogador | null>(null);
-  const erroLocal = validar(apelido);
+  const erroLocal = validarApelido(apelido);
   const msg = msgServidor ?? (tocado ? erroLocal : null);
 
   function enviar(e: FormEvent) {

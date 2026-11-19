@@ -15,6 +15,10 @@ export const NAV = [
   { href: "/perfil", rotulo: "Perfil", icone: UserRound },
 ];
 
+function navegaPara(navegacaoAtual: string, destino: string) {
+  return destino === "/" ? navegacaoAtual === "/" : navegacaoAtual.startsWith(destino);
+}
+
 export function Logo({ claro = false }: { claro?: boolean }) {
   return (
     <span className={cn("inline-flex items-center gap-1.5 font-display text-2xl font-extrabold tracking-tight", claro ? "text-sidebar-foreground" : "text-foreground")}>
@@ -33,7 +37,7 @@ export function Layout({ jogador, children }: { jogador: Jogador; children: Reac
         <Link href="/" data-testid="link-logo" className="px-2"><Logo claro /></Link>
         <nav aria-label="Navegação principal" className="flex flex-col gap-2">
           {NAV.map((n) => {
-            const ativo = n.href === "/" ? loc === "/" : loc.startsWith(n.href);
+            const ativo = navegaPara(loc, n.href);
             return (
               <Link key={n.href} href={n.href} data-testid={"link-nav-" + n.rotulo.toLowerCase()} aria-current={ativo ? "page" : undefined}
                 className={cn("flex items-center gap-3 rounded-xl px-4 py-3 text-lg font-bold transition-all",
@@ -72,7 +76,7 @@ export function Layout({ jogador, children }: { jogador: Jogador; children: Reac
 
       <nav aria-label="Navegação principal" className="md:hidden fixed bottom-0 inset-x-0 z-30 grid grid-cols-5 bg-sidebar border-t-4 border-accent pb-[env(safe-area-inset-bottom)]">
         {NAV.map((n) => {
-          const ativo = n.href === "/" ? loc === "/" : loc.startsWith(n.href);
+          const ativo = navegaPara(loc, n.href);
           return (
             <Link key={n.href} href={n.href} data-testid={"link-tab-" + n.rotulo.toLowerCase()} aria-current={ativo ? "page" : undefined}
               className={cn("flex flex-col items-center gap-1 py-2.5 text-xs font-bold transition-colors",
